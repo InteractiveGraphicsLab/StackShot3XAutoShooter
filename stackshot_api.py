@@ -21,8 +21,10 @@ Form1(void)
 
 def send_command(device: Ftdi, axis: CommRailAxis, cmd: CommCmd, action: CommAction, data: bytearray | None, lenIn: int):
     cmd = int(cmd)
-    print(axis)
-    action = (int(action) | (int(axis-1) << 4))
+    if axis == CommRailAxis.COMM_RAIL_AXIS_ANY:
+        action = (int(action) | (int(CommRailAxis.COMM_RAIL_AXIS_ANY) << 4))
+    else:
+        action = (int(action) | (int(axis-1) << 4))
 
     byte = bytearray()
     byte.extend(b'\x55')
@@ -62,7 +64,6 @@ def send_command(device: Ftdi, axis: CommRailAxis, cmd: CommCmd, action: CommAct
         print('response:', res_response.to_bytes(1, 'big'))
 
     res_buffsize = res[4]
-    # print('res_buffsize:', res_buffsize)
 
     res_data = None
     if 0 < res_buffsize:
