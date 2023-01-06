@@ -39,8 +39,8 @@ class StackShotController:
         n = self.device.write_data(byte)
         time.sleep(1)
 
-        ### wait for response
         res = self.device.read_data(100)
+        ### wait for response
         time.sleep(1)
 
         """
@@ -101,12 +101,6 @@ class StackShotController:
     def move(self, axis: RailAxis, dir: RailDir, dist: float):
         print('\n=== Move ===')
 
-        # wait for rail stop
-        while(True):
-            if self.rail_status(axis) != RAIL_STATUS_MOVING:
-                break
-            time.sleep(0.5)
-
         castedDist = float2uint(dist)
 
         data = bytearray()
@@ -119,6 +113,13 @@ class StackShotController:
         data.extend(((castedDist >> 24) & 0x0FF).to_bytes(1, 'big'))
 
         self.send_command(axis, Cmd.CC_RAIL_MOVE, Action.COMM_ACTION_WRITE, data, 7)
+
+        # wait for rail stop
+        while(True):
+            if self.rail_status(axis) != RAIL_STATUS_MOVING:
+                break
+            time.sleep(0.5)
+
 
     def stop(self):
         print('=== STOP ===')
