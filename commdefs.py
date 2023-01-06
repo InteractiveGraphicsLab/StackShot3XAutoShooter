@@ -8,7 +8,7 @@ RAIL_STATUS_SHUTTER         = 0x02 # The shutter is currently firing
 RAIL_STATUS_USER_ABORTED    = 0x04 # The user has aborted a move
 
 
-class CommStatus(IntEnum):
+class Status(IntEnum):
     COMM_STATUS_FAILED = 0
     COMM_STATUS_SUCCESS = auto()        # The operation was successful
     COMM_STATUS_BUSY = auto()           # The current operation could not begin because it is already in progress
@@ -21,7 +21,7 @@ class CommStatus(IntEnum):
     COMM_STATUS_NOT_FOUND = auto()      # The requested controller could not be found via USB
 
 
-class CommRailAxis(IntEnum):
+class RailAxis(IntEnum):
     COMM_RAIL_AXIS_ANY = 0              # Use any available axis when opening
     COMM_RAIL_AXIS_X = auto()           # Only open the X axis
     COMM_RAIL_AXIS_Y = auto()           # Only open the Y axis
@@ -29,7 +29,7 @@ class CommRailAxis(IntEnum):
     COMM_RAIL_AXIS_UNDEFINED = auto()   # The axis stored in the controller is undefined
 
 
-class CommCmd(IntEnum):
+class Cmd(IntEnum):
 	CC_RAIL_MOVE = 0x1000               # Move the rail to the specified position
 	CC_RAIL_POSITION_TARGET = auto()    # Desired target position for the rail
 	CC_RAIL_POSITION_CURRENT = auto()   # Current position of the rail
@@ -87,7 +87,7 @@ class CommCmd(IntEnum):
 	CC_CLOSE = auto()
 
 
-class CommAction(IntEnum):
+class Action(IntEnum):
 	COMM_ACTION_MIN = 0
 	COMM_ACTION_READ = COMM_ACTION_MIN      # Read the specified command
 	COMM_ACTION_WRITE = auto()              # Write the specified command
@@ -101,14 +101,14 @@ class CommAction(IntEnum):
 	COMM_ACTION_MAX = auto()
 
 
-class CommRailDir(IntEnum):
+class RailDir(IntEnum):
 	COMM_RAIL_DIR_MIN = 0
 	COMM_RAIL_DIR_FWD = COMM_RAIL_DIR_MIN   # Move the rail in the forward direction
 	COMM_RAIL_DIR_BACK = auto()             # Move the rail in the backward direction
 	COMM_RAIL_DIR_MAX = auto()
 
 
-class CommRailUnits(IntEnum):
+class RailUnits(IntEnum):
 	COMM_RAIL_UNITS_MIN = 0
 	COMM_RAIL_UNITS_ENGLISH = COMM_RAIL_UNITS_MIN   # English/mils
 	COMM_RAIL_UNITS_METRIC = auto()                 # Metric/mm
