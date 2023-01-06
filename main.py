@@ -1,26 +1,23 @@
 import time
 from pyftdi.ftdi import Ftdi
 
-from stackshot_api import *
-
-def main(device: Ftdi):
-    try:
-        dist = 5
-
-        stackshot_move(device, CommRailAxis.COMM_RAIL_AXIS_X, CommRailDir.COMM_RAIL_DIR_FWD, CommRailUnits.COMM_RAIL_UNITS_METRIC, True, dist)
-
-        stackshot_move(device, CommRailAxis.COMM_RAIL_AXIS_Y, CommRailDir.COMM_RAIL_DIR_FWD, CommRailUnits.COMM_RAIL_UNITS_METRIC, True, dist)
-
-    except Exception as e:
-        print('\n', 'Exception:', e, '\n')
+from commdefs import *
+from stackshot_controller import StackShotController
 
 if __name__ == '__main__':
     try:
-        device = stackshot_open('ftdi://ftdi:232:AI04PHAW/1')
-        main(device)
+        controller = StackShotController()
+        controller.open()
+
+        dist = 5
+        controller.move(RailAxis.COMM_RAIL_AXIS_Z, RailDir.COMM_RAIL_DIR_FWD, dist)
+        controller.move(RailAxis.COMM_RAIL_AXIS_X, RailDir.COMM_RAIL_DIR_FWD, dist)
+
+        controller.move(RailAxis.COMM_RAIL_AXIS_Z, RailDir.COMM_RAIL_DIR_BACK, dist)
+        controller.move(RailAxis.COMM_RAIL_AXIS_X, RailDir.COMM_RAIL_DIR_BACK, dist)
 
     except Exception as excpt:
         print(excpt)
 
     finally:
-        stackshot_close(device)
+        controller.close()
