@@ -1,23 +1,17 @@
+import sys
 import time
+from PyQt6 import QtWidgets
+
 from pyftdi.ftdi import Ftdi
 
 from commdefs import *
 from stackshot_controller import StackShotController
 
+from GUI import GUI
+
+
 if __name__ == '__main__':
-    try:
-        controller = StackShotController()
-        controller.open()
-
-        dist = 5
-        controller.move(RailAxis.COMM_RAIL_AXIS_Z, RailDir.COMM_RAIL_DIR_FWD, dist)
-        controller.move(RailAxis.COMM_RAIL_AXIS_X, RailDir.COMM_RAIL_DIR_FWD, dist)
-
-        controller.move(RailAxis.COMM_RAIL_AXIS_Z, RailDir.COMM_RAIL_DIR_BACK, dist)
-        controller.move(RailAxis.COMM_RAIL_AXIS_X, RailDir.COMM_RAIL_DIR_BACK, dist)
-
-    except Exception as excpt:
-        print(excpt)
-
-    finally:
-        controller.close()
+    app = QtWidgets.QApplication(sys.argv)
+    gui = GUI()
+    gui.show()
+    sys.exit(app.exec())
