@@ -8,7 +8,7 @@
 
 from PyQt6 import QtCore, QtGui, QtWidgets
 
-import stackshot_util as util
+import stackshot_util
 from stackshot_controller import StackShotController
 from commdefs import *
 
@@ -39,8 +39,8 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-        self.startButton.clicked.connect(lambda: util.start(self.plainTextEdit.toPlainText()))
-        self.startButton.clicked.connect(util.shutter)
+        self.startButton.clicked.connect(lambda: stackshot_util.start(self.plainTextEdit.toPlainText()))
+        self.shutterButton.clicked.connect(stackshot_util.shutter)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
