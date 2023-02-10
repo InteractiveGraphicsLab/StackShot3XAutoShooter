@@ -1,5 +1,6 @@
 import time
 import ctypes
+import usb.core
 
 from commdefs import *
 from pyftdi.ftdi import Ftdi
@@ -76,7 +77,17 @@ class StackShotController:
         return res_data
 
     def open(self):
-        self.device.open_from_url('ftdi://ftdi:232:AI04PHAW/1') # NOTE
+        device_list = self.device.list_devices()
+        device = None
+        for d in device_list:
+            if d[0].description == 'StackShot3x':
+                device = usb.core.find(idVendor=d[0].vid, idProduct=d[0].pid)
+                break
+
+        if device == None:
+            raise Exception("Device Not Found") # NOTE
+
+        self.device.open_from_device(device)
 
         self.device.set_bitmode(0xFF, Ftdi.BitMode.CBUS)
 
