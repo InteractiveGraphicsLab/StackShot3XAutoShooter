@@ -29,3 +29,16 @@ def start(rawComands: str):
 
     finally:
         controller.close()
+
+def shutter():
+    try:
+        controller = StackShotController()
+        controller.open()
+
+        controller.shutter(1, 1., 2.) # NOTE
+
+    except Exception as excpt:
+        print(excpt)
+
+    finally:
+        controller.close()
