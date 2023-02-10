@@ -8,9 +8,6 @@
 
 from PyQt6 import QtCore, QtGui, QtWidgets
 
-import stackshot_util
-from stackshot_controller import StackShotController
-from commdefs import *
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -24,9 +21,9 @@ class Ui_MainWindow(object):
         self.startButton = QtWidgets.QPushButton(self.centralwidget)
         self.startButton.setGeometry(QtCore.QRect(710, 530, 75, 23))
         self.startButton.setObjectName("startButton")
-        self.shutterButton = QtWidgets.QPushButton(self.centralwidget)
-        self.shutterButton.setGeometry(QtCore.QRect(620, 530, 75, 23))
-        self.shutterButton.setObjectName("shutterButton")
+        self.stopButton = QtWidgets.QPushButton(self.centralwidget)
+        self.stopButton.setGeometry(QtCore.QRect(620, 530, 75, 23))
+        self.stopButton.setObjectName("stopButton")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 22))
@@ -39,11 +36,8 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-        self.startButton.clicked.connect(lambda: stackshot_util.start(self.plainTextEdit.toPlainText()))
-        self.shutterButton.clicked.connect(stackshot_util.shutter)
-
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.startButton.setText(_translate("MainWindow", "start"))
-        self.shutterButton.setText(_translate("MainWindow", "shutter"))
+        self.stopButton.setText(_translate("MainWindow", "stop"))

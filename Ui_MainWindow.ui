@@ -37,7 +37,7 @@
      <string>start</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="shutterButton">
+   <widget class="QPushButton" name="stopButton">
     <property name="geometry">
      <rect>
       <x>620</x>
@@ -47,7 +47,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>shutter</string>
+     <string>stop</string>
     </property>
    </widget>
   </widget>
