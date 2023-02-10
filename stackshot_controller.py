@@ -76,7 +76,7 @@ class StackShotController:
         return res_data
 
     def open(self):
-        self.device.open_from_url('ftdi://ftdi:232:AI04PHAW/1')
+        self.device.open_from_url('ftdi://ftdi:232:AI04PHAW/1') # NOTE
 
         self.device.set_bitmode(0xFF, Ftdi.BitMode.CBUS)
 
