@@ -85,9 +85,13 @@ class StackShotController:
         self.device.set_baudrate(STACKSHOT_BAUD_RATE)
         self.device.set_flowctrl('') # no flow controll
 
+        self.stop(RailAxis.COMM_RAIL_AXIS_X)
+        self.stop(RailAxis.COMM_RAIL_AXIS_Y)
+        self.stop(RailAxis.COMM_RAIL_AXIS_Z)
+
+
     def close(self):
         print('\n=== Close ===')
-        self.stop()
         self.device.set_bitmode(0xF0, Ftdi.BitMode.CBUS)
         self.send_command(RailAxis.COMM_RAIL_AXIS_ANY, Cmd.CC_CLOSE, Action.COMM_ACTION_WRITE, None, 0)
         self.device.close()
@@ -121,9 +125,9 @@ class StackShotController:
             time.sleep(0.5)
 
 
-    def stop(self):
+    def stop(self, axis: RailAxis):
         print('=== STOP ===')
-        self.send_command(RailAxis.COMM_RAIL_AXIS_ANY, Cmd.CC_RAIL_STOP, Action.COMM_ACTION_WRITE, None, 0)
+        self.send_command(axis, Cmd.CC_RAIL_STOP, Action.COMM_ACTION_WRITE, None, 0)
 
     def shutter(self,  num_pulses: int, pulse_duration: float, pulse_off_time: float):
         casted_pulse_duration = float2uint(pulse_duration)
