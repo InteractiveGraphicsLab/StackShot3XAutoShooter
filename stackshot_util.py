@@ -24,18 +24,9 @@ def start(rawComands: str):
                 elif action[1] == 'z':
                     controller.move(RailAxis.COMM_RAIL_AXIS_Z, RailDir.COMM_RAIL_DIR_FWD, int(action[2]))
 
-    except Exception as excpt:
-        print(excpt)
+            elif action[0] == 'shutter':
+                controller.shutter(1, 1., 2.) # NOTE
 
-    finally:
-        controller.close()
-
-def shutter():
-    try:
-        controller = StackShotController()
-        controller.open()
-
-        controller.shutter(1, 1., 2.) # NOTE
 
     except Exception as excpt:
         print(excpt)

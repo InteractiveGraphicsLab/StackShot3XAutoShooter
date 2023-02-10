@@ -50,6 +50,8 @@ def action_parser(raw_action: str):
           (action[1] == 'x' or action[1] == 'y' or action[1] == 'z') and \
           action[2].isdigit(): # NOTE: add velocity?
             action_list.append(action)
+        elif action[0] == 'shutter' and len(action) == 1:
+            action_list.append(action)
         else:
             raise ActionError('SyntaxError', line)
 
