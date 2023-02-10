@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'StackShotControllerGUI.ui'
+# Form implementation generated from reading ui file 'Ui_MainWindow.ui'
 #
 # Created by: PyQt6 UI code generator 6.4.0
 #
@@ -24,6 +24,9 @@ class Ui_MainWindow(object):
         self.startButton = QtWidgets.QPushButton(self.centralwidget)
         self.startButton.setGeometry(QtCore.QRect(710, 530, 75, 23))
         self.startButton.setObjectName("startButton")
+        self.shutterButton = QtWidgets.QPushButton(self.centralwidget)
+        self.shutterButton.setGeometry(QtCore.QRect(620, 530, 75, 23))
+        self.shutterButton.setObjectName("shutterButton")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 22))
@@ -37,8 +40,10 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         self.startButton.clicked.connect(lambda: util.start(self.plainTextEdit.toPlainText()))
+        self.startButton.clicked.connect(util.shutter)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.startButton.setText(_translate("MainWindow", "start"))
+        self.shutterButton.setText(_translate("MainWindow", "shutter"))
