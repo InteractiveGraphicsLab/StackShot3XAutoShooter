@@ -1,6 +1,6 @@
 import sys
 import time
-from PyQt6 import QtWidgets
+from PySide6 import QtWidgets
 
 from pyftdi.ftdi import Ftdi
 
