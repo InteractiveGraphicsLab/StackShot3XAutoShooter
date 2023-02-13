@@ -1,3 +1,6 @@
+import os
+
+from pathlib import Path
 from commdefs import *
 from stackshot_controller import StackShotController
 from action_parser import action_parser
@@ -10,11 +13,17 @@ def start(rawComands: str):
         print(action_queue)
     except Exception as e:
         print(e)
+        return
+
+
+    controller = StackShotController()
+    try:
+        controller.open()
+    except Exception as excpt:
+        print(excpt)
+        return
 
     try:
-        controller = StackShotController()
-        controller.open()
-
         for action in action_queue:
             if action[0] == 'move':
                 if action[1] == 'x':
@@ -27,6 +36,17 @@ def start(rawComands: str):
             elif action[0] == 'shutter':
                 controller.shutter(1, 1., 2.) # NOTE
 
+                savedir = '' ## 保存先ディレクトリ
+                os.makedirs(savedir) # 保存ディレクトリを作成
+
+                tmpdir = '' ## 撮影された写真が保存される一時ディレクトリ
+                images = list(Path(tmpdir).glob(r'*.[jpg|JPG|png|PNG]'))
+                images.sort(key=os.path.getmtime, reverse=True) # 画像のタイムスタンプの降順
+                brackets = 16 # NOTE get from config??
+                save_images = images[:brackets]
+
+                for image in save_images:
+                    os.rename(os.path.join(tmpdir, image), os.path.join(savedir, image)) # ファイル移動
 
     except Exception as excpt:
         print(excpt)
