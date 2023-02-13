@@ -1,8 +1,11 @@
 import time
 import ctypes
+import usb.core
 
 from commdefs import *
 from pyftdi.ftdi import Ftdi
+from pathlib import Path
+from autoshooter_error import AutoShooterError
 
 def float2uint(data: float):
     # casted_data = (unsigned int*)&data
@@ -39,8 +42,8 @@ class StackShotController:
         n = self.device.write_data(byte)
         time.sleep(1)
 
-        ### wait for response
         res = self.device.read_data(100)
+        ### wait for response
         time.sleep(1)
 
         """
@@ -76,7 +79,17 @@ class StackShotController:
         return res_data
 
     def open(self):
-        self.device.open_from_url('ftdi://ftdi:232:AI04PHAW/1')
+        device_list = self.device.list_devices()
+        device = None
+        for d in device_list:
+            if d[0].description == 'StackShot3x':
+                device = usb.core.find(idVendor=d[0].vid, idProduct=d[0].pid)
+                break
+
+        if device == None:
+            raise AutoShooterError("Device Not Found") # NOTE
+
+        self.device.open_from_device(device)
 
         self.device.set_bitmode(0xFF, Ftdi.BitMode.CBUS)
 
@@ -85,27 +98,25 @@ class StackShotController:
         self.device.set_baudrate(STACKSHOT_BAUD_RATE)
         self.device.set_flowctrl('') # no flow controll
 
+        self.stop(RailAxis.COMM_RAIL_AXIS_X)
+        self.stop(RailAxis.COMM_RAIL_AXIS_Y)
+        self.stop(RailAxis.COMM_RAIL_AXIS_Z)
+
+
     def close(self):
         print('\n=== Close ===')
-        self.stop()
         self.device.set_bitmode(0xF0, Ftdi.BitMode.CBUS)
         self.send_command(RailAxis.COMM_RAIL_AXIS_ANY, Cmd.CC_CLOSE, Action.COMM_ACTION_WRITE, None, 0)
         self.device.close()
 
     def rail_status(self, axis: RailAxis):
-        res = self.send_command(axis, Cmd.CC_RAIL_STATUS, Action.COMM_ACTION_READ, None, 0)
+        res = self.send_command(axis, Cmd.CC_RAIL_STATUS, Action.COMM_ACTION_READ, None, 0) # axis不要?
         status = (int(res[0])) | (int(res[1]) << 8) | (int(res[2]) << 16) | (int(res[3]) << 24)
 
         return status
 
     def move(self, axis: RailAxis, dir: RailDir, dist: float):
         print('\n=== Move ===')
-
-        # wait for rail stop
-        while(True):
-            if self.rail_status(axis) != RAIL_STATUS_MOVING:
-                break
-            time.sleep(0.5)
 
         castedDist = float2uint(dist)
 
@@ -120,9 +131,16 @@ class StackShotController:
 
         self.send_command(axis, Cmd.CC_RAIL_MOVE, Action.COMM_ACTION_WRITE, data, 7)
 
-    def stop(self):
+        # wait for rail stop
+        while(True):
+            if self.rail_status(axis) != RAIL_STATUS_MOVING:
+                break
+            time.sleep(0.5)
+
+
+    def stop(self, axis: RailAxis):
         print('=== STOP ===')
-        self.send_command(RailAxis.COMM_RAIL_AXIS_ANY, Cmd.CC_RAIL_STOP, Action.COMM_ACTION_WRITE, None, 0)
+        self.send_command(axis, Cmd.CC_RAIL_STOP, Action.COMM_ACTION_WRITE, None, 0)
 
     def shutter(self,  num_pulses: int, pulse_duration: float, pulse_off_time: float):
         casted_pulse_duration = float2uint(pulse_duration)
@@ -141,3 +159,9 @@ class StackShotController:
         data.extend(((casted_pulse_off_time >> 24) & 0x0FF).to_bytes(1, 'big'))
 
         self.send_command(RailAxis.COMM_RAIL_AXIS_ANY, Cmd.CC_RAIL_SHUTTER_FIRE, Action.COMM_ACTION_WRITE, data, 10)
+
+        # wait for finish shutter
+        while(True):
+            if self.rail_status(RailAxis.COMM_RAIL_AXIS_ANY) != RAIL_STATUS_SHUTTER:
+                break
+            time.sleep(0.5)
