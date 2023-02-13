@@ -1,8 +1,7 @@
-from action_error import ActionError
+from autoshooter_error import AutoShooterError
 
 def create_action_queue(action_list: list):
     queue = []
-    print('!!!!! action_list: ', action_list)
 
     i = 0
     # parse loop
@@ -14,9 +13,7 @@ def create_action_queue(action_list: list):
             last_end = len(action_list)-1
             while action_list[last_end][0] != 'end':
                 last_end -= 1
-            print(i, '-', last_end)
             action_in_loop_list = action_list[i:last_end]
-            print(action_in_loop_list)
 
             loop_queue = create_action_queue(action_in_loop_list)
             for t in range(loop_times):
@@ -44,7 +41,7 @@ def action_parser(raw_action: str):
         elif action[0] == 'end' and len(action) == 1:
             action_list.append(action)
             if loop_count == 0: # 'end' before 'loop'
-                raise ActionError('SyntaxError', line)
+                raise AutoShooterError('SyntaxError', line)
             loop_count -= 1
         elif action[0] == 'move' and len(action) == 3 and \
           (action[1] == 'x' or action[1] == 'y' or action[1] == 'z') and \
@@ -53,9 +50,9 @@ def action_parser(raw_action: str):
         elif action[0] == 'shutter' and len(action) == 1:
             action_list.append(action)
         else:
-            raise ActionError('SyntaxError', line)
+            raise AutoShooterError('SyntaxError', line)
 
     if loop_count != 0:
-        raise ActionError('SyntaxError', 'need \'end\'')
+        raise AutoShooterError('SyntaxError', 'need \'end\'')
 
     return create_action_queue(action_list)
