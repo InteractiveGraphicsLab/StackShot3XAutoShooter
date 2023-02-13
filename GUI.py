@@ -41,6 +41,7 @@ class GUI(QtWidgets.QMainWindow):
             return
 
         try:
+            shutter_count = 0
             for action in action_queue:
                 if action[0] == 'move':
                     if action[1] == 'x':
@@ -64,7 +65,8 @@ class GUI(QtWidgets.QMainWindow):
 
                     for image_path in save_image_paths:
                         image_name = os.path.basename(image_path)
-                        os.rename(image_path, os.path.join(savedir, image_name)) # ファイル移動
+                        os.rename(image_path, os.path.join(savedir, str(shutter_count).zfill(4), image_name)) # ファイル移動
+                    shutter_count += 1
 
         except Exception as excpt:
             print(excpt)
