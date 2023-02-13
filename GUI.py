@@ -62,7 +62,7 @@ class GUI(QtWidgets.QMainWindow):
                     brackets = 16 # NOTE get from config??
                     save_image_paths = image_paths[:brackets]
 
-                    save_dir = os.path.join(self.gui.savePath.toPlainText(), str(shutter_count).zfill(4)) # image save dir
+                    save_dir = os.path.join(save_basedir, str(shutter_count).zfill(4)) # image save dir
                     os.makedirs(save_dir) # create image save dir
                     for image_path in save_image_paths:
                         image_name = os.path.basename(image_path)
