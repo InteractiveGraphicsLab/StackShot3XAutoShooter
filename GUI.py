@@ -42,6 +42,8 @@ class GUI(QtWidgets.QMainWindow):
 
         try:
             shutter_count = 0
+            tmp_dir = self.gui.imagePath.toPlainText() # 撮影された写真が保存される一時ディレクトリ
+            save_basedir = self.gui.savePath.toPlainText() # 保存ベースディレクトリ
             for action in action_queue:
                 if action[0] == 'move':
                     if action[1] == 'x':
@@ -54,18 +56,16 @@ class GUI(QtWidgets.QMainWindow):
                 elif action[0] == 'shutter':
                     controller.shutter(1, 1., 2.) # NOTE
 
-                    savedir = '' ## 保存先ディレクトリ
-                    os.makedirs(savedir) # 保存ディレクトリを作成
-
-                    tmpdir = '' ## 撮影された写真が保存される一時ディレクトリ
-                    image_paths = [os.path.join(tmpdir, f) for f in os.listdir(tmpdir)] # NOTE need ext check
+                    image_paths = [os.path.join(tmp_dir, f) for f in os.listdir(tmp_dir)] # NOTE need ext check
                     image_paths.sort(key=os.path.getmtime, reverse=True) # 画像のタイムスタンプの降順
                     brackets = 16 # NOTE get from config??
                     save_image_paths = image_paths[:brackets]
 
+                    save_dir = os.path.join(self.gui.savePath.toPlainText(), str(shutter_count).zfill(4)) # 保存ディレクトリ
+                    os.makedirs(save_dir) # 保存ディレクトリを作成
                     for image_path in save_image_paths:
                         image_name = os.path.basename(image_path)
-                        os.rename(image_path, os.path.join(savedir, str(shutter_count).zfill(4), image_name)) # ファイル移動
+                        os.rename(image_path, os.path.join(save_dir, image_name)) # ファイル移動
                     shutter_count += 1
 
         except Exception as excpt:
