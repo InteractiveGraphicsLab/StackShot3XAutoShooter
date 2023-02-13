@@ -4,6 +4,8 @@ import usb.core
 
 from commdefs import *
 from pyftdi.ftdi import Ftdi
+from pathlib import Path
+from autoshooter_error import AutoShooterError
 
 def float2uint(data: float):
     # casted_data = (unsigned int*)&data
@@ -85,7 +87,7 @@ class StackShotController:
                 break
 
         if device == None:
-            raise Exception("Device Not Found") # NOTE
+            raise AutoShooterError("Device Not Found") # NOTE
 
         self.device.open_from_device(device)
 
@@ -108,7 +110,7 @@ class StackShotController:
         self.device.close()
 
     def rail_status(self, axis: RailAxis):
-        res = self.send_command(axis, Cmd.CC_RAIL_STATUS, Action.COMM_ACTION_READ, None, 0)
+        res = self.send_command(axis, Cmd.CC_RAIL_STATUS, Action.COMM_ACTION_READ, None, 0) # axis不要?
         status = (int(res[0])) | (int(res[1]) << 8) | (int(res[2]) << 16) | (int(res[3]) << 24)
 
         return status
@@ -157,3 +159,9 @@ class StackShotController:
         data.extend(((casted_pulse_off_time >> 24) & 0x0FF).to_bytes(1, 'big'))
 
         self.send_command(RailAxis.COMM_RAIL_AXIS_ANY, Cmd.CC_RAIL_SHUTTER_FIRE, Action.COMM_ACTION_WRITE, data, 10)
+
+        # wait for finish shutter
+        while(True):
+            if self.rail_status(RailAxis.COMM_RAIL_AXIS_ANY) != RAIL_STATUS_SHUTTER:
+                break
+            time.sleep(0.5)
