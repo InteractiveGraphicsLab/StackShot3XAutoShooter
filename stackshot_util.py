@@ -45,7 +45,7 @@ def start(rawComands: str):
                 save_image_paths = image_paths[:brackets]
 
                 for image_path in save_image_paths:
-                    image_name = os.path.basename(image_paths)
+                    image_name = os.path.basename(image_path)
                     os.rename(image_path, os.path.join(savedir, image_name)) # ファイル移動
 
     except Exception as excpt:
