@@ -1,6 +1,5 @@
 import os
 
-from pathlib import Path
 from commdefs import *
 from stackshot_controller import StackShotController
 from action_parser import action_parser
@@ -40,7 +39,7 @@ def start(rawComands: str):
                 os.makedirs(savedir) # 保存ディレクトリを作成
 
                 tmpdir = '' ## 撮影された写真が保存される一時ディレクトリ
-                images = list(Path(tmpdir).glob(r'*.[jpg|JPG|png|PNG]'))
+                images = [os.path.join(tmpdir, f) for f in os.listdir(tmpdir)] # NOTE need ext check
                 images.sort(key=os.path.getmtime, reverse=True) # 画像のタイムスタンプの降順
                 brackets = 16 # NOTE get from config??
                 save_images = images[:brackets]
