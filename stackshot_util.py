@@ -39,13 +39,14 @@ def start(rawComands: str):
                 os.makedirs(savedir) # 保存ディレクトリを作成
 
                 tmpdir = '' ## 撮影された写真が保存される一時ディレクトリ
-                images = [os.path.join(tmpdir, f) for f in os.listdir(tmpdir)] # NOTE need ext check
-                images.sort(key=os.path.getmtime, reverse=True) # 画像のタイムスタンプの降順
+                image_paths = [os.path.join(tmpdir, f) for f in os.listdir(tmpdir)] # NOTE need ext check
+                image_paths.sort(key=os.path.getmtime, reverse=True) # 画像のタイムスタンプの降順
                 brackets = 16 # NOTE get from config??
-                save_images = images[:brackets]
+                save_image_paths = image_paths[:brackets]
 
-                for image in save_images:
-                    os.rename(os.path.join(tmpdir, image), os.path.join(savedir, image)) # ファイル移動
+                for image_path in save_image_paths:
+                    image_name = os.path.basename(image_paths)
+                    os.rename(image_path, os.path.join(savedir, image_name)) # ファイル移動
 
     except Exception as excpt:
         print(excpt)
