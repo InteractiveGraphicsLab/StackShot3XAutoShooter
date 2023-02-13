@@ -59,7 +59,6 @@ class GUI(QtWidgets.QMainWindow):
 
                     image_paths = [os.path.join(tmp_dir, f) for f in os.listdir(tmp_dir)] # NOTE need ext check
                     image_paths.sort(key=os.path.getmtime, reverse=True) # desc images timestamp
-                    brackets = 16 # NOTE get from config??
                     save_image_paths = image_paths[:brackets]
 
                     save_dir = os.path.join(save_basedir, str(shutter_count).zfill(4)) # image save dir
