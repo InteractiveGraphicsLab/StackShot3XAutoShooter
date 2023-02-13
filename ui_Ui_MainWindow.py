@@ -16,9 +16,9 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PySide6.QtWidgets import (QApplication, QLabel, QMainWindow, QMenu,
-    QMenuBar, QPlainTextEdit, QPushButton, QSizePolicy,
-    QStatusBar, QWidget)
+from PySide6.QtWidgets import (QApplication, QLabel, QLineEdit, QMainWindow,
+    QMenu, QMenuBar, QPlainTextEdit, QPushButton,
+    QSizePolicy, QSpinBox, QStatusBar, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -27,9 +27,9 @@ class Ui_MainWindow(object):
         MainWindow.resize(800, 600)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.plainTextEdit = QPlainTextEdit(self.centralwidget)
-        self.plainTextEdit.setObjectName(u"plainTextEdit")
-        self.plainTextEdit.setGeometry(QRect(20, 60, 461, 421))
+        self.actionsText = QPlainTextEdit(self.centralwidget)
+        self.actionsText.setObjectName(u"actionsText")
+        self.actionsText.setGeometry(QRect(20, 60, 461, 421))
         self.startButton = QPushButton(self.centralwidget)
         self.startButton.setObjectName(u"startButton")
         self.startButton.setGeometry(QRect(710, 530, 75, 23))
@@ -42,20 +42,28 @@ class Ui_MainWindow(object):
         font = QFont()
         font.setPointSize(16)
         self.label.setFont(font)
-        self.imagePath = QPlainTextEdit(self.centralwidget)
-        self.imagePath.setObjectName(u"imagePath")
-        self.imagePath.setGeometry(QRect(510, 60, 281, 31))
         self.label_2 = QLabel(self.centralwidget)
         self.label_2.setObjectName(u"label_2")
-        self.label_2.setGeometry(QRect(510, 30, 111, 31))
+        self.label_2.setGeometry(QRect(510, 30, 161, 31))
         self.label_2.setFont(font)
         self.label_3 = QLabel(self.centralwidget)
         self.label_3.setObjectName(u"label_3")
-        self.label_3.setGeometry(QRect(510, 100, 111, 41))
+        self.label_3.setGeometry(QRect(510, 100, 161, 31))
         self.label_3.setFont(font)
-        self.savePath = QPlainTextEdit(self.centralwidget)
-        self.savePath.setObjectName(u"savePath")
-        self.savePath.setGeometry(QRect(510, 140, 281, 31))
+        self.imageTmpPath = QLineEdit(self.centralwidget)
+        self.imageTmpPath.setObjectName(u"imageTmpPath")
+        self.imageTmpPath.setGeometry(QRect(510, 60, 271, 31))
+        self.imageSavePath = QLineEdit(self.centralwidget)
+        self.imageSavePath.setObjectName(u"imageSavePath")
+        self.imageSavePath.setGeometry(QRect(510, 130, 271, 31))
+        self.label_4 = QLabel(self.centralwidget)
+        self.label_4.setObjectName(u"label_4")
+        self.label_4.setGeometry(QRect(510, 190, 111, 31))
+        self.label_4.setFont(font)
+        self.brackets = QSpinBox(self.centralwidget)
+        self.brackets.setObjectName(u"brackets")
+        self.brackets.setGeometry(QRect(510, 220, 51, 31))
+        self.brackets.setMinimum(1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
@@ -79,8 +87,9 @@ class Ui_MainWindow(object):
         self.startButton.setText(QCoreApplication.translate("MainWindow", u"start", None))
         self.stopButton.setText(QCoreApplication.translate("MainWindow", u"stop", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"Actions", None))
-        self.label_2.setText(QCoreApplication.translate("MainWindow", u"Image Path", None))
-        self.label_3.setText(QCoreApplication.translate("MainWindow", u"Save Path", None))
+        self.label_2.setText(QCoreApplication.translate("MainWindow", u"Image Tmp Path", None))
+        self.label_3.setText(QCoreApplication.translate("MainWindow", u"Image Save Path", None))
+        self.label_4.setText(QCoreApplication.translate("MainWindow", u"Brackets", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
     # retranslateUi
 

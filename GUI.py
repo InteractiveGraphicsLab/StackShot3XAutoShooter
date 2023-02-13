@@ -23,11 +23,11 @@ class GUI(QtWidgets.QMainWindow):
 
     # def start(rawComands: str):
     def start(self):
-        raw_commands = self.gui.plainTextEdit.toPlainText()
+        raw_actions = self.gui.actionsText.toPlainText()
 
         # validation
         try:
-            action_queue = action_parser(raw_commands)
+            action_queue = action_parser(raw_actions)
             print(action_queue)
         except Exception as e:
                 print(e)
@@ -42,8 +42,9 @@ class GUI(QtWidgets.QMainWindow):
 
         try:
             shutter_count = 0
-            tmp_dir = self.gui.imagePath.toPlainText() # 撮影された写真が保存される一時ディレクトリ
-            save_basedir = self.gui.savePath.toPlainText() # 保存ベースディレクトリ
+            tmp_dir = self.gui.imageTmpPath.text() # tmp dir
+            save_basedir = self.gui.imageSavePath.text() # save path
+            brackets = self.gui.brackets.value() # num of brackets
             for action in action_queue:
                 if action[0] == 'move':
                     if action[1] == 'x':
@@ -57,15 +58,15 @@ class GUI(QtWidgets.QMainWindow):
                     controller.shutter(1, 1., 2.) # NOTE
 
                     image_paths = [os.path.join(tmp_dir, f) for f in os.listdir(tmp_dir)] # NOTE need ext check
-                    image_paths.sort(key=os.path.getmtime, reverse=True) # 画像のタイムスタンプの降順
+                    image_paths.sort(key=os.path.getmtime, reverse=True) # desc images timestamp
                     brackets = 16 # NOTE get from config??
                     save_image_paths = image_paths[:brackets]
 
-                    save_dir = os.path.join(self.gui.savePath.toPlainText(), str(shutter_count).zfill(4)) # 保存ディレクトリ
-                    os.makedirs(save_dir) # 保存ディレクトリを作成
+                    save_dir = os.path.join(self.gui.savePath.toPlainText(), str(shutter_count).zfill(4)) # image save dir
+                    os.makedirs(save_dir) # create image save dir
                     for image_path in save_image_paths:
                         image_name = os.path.basename(image_path)
-                        os.rename(image_path, os.path.join(save_dir, image_name)) # ファイル移動
+                        os.rename(image_path, os.path.join(save_dir, image_name)) # move image
                     shutter_count += 1
 
         except Exception as excpt:
