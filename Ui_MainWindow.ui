@@ -50,7 +50,7 @@
      <string>stop</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="actionsLabel">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -68,7 +68,7 @@
      <string>Actions</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
+   <widget class="QLabel" name="imageTmpPathLabel">
     <property name="geometry">
      <rect>
       <x>510</x>
@@ -86,7 +86,7 @@
      <string>Image Tmp Path</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_3">
+   <widget class="QLabel" name="imageSavePathLabel">
     <property name="geometry">
      <rect>
       <x>510</x>
@@ -124,7 +124,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLabel" name="label_4">
+   <widget class="QLabel" name="bracketsLabel">
     <property name="geometry">
      <rect>
       <x>510</x>
@@ -153,6 +153,61 @@
     </property>
     <property name="minimum">
      <number>1</number>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="doFocusStacking">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>270</y>
+      <width>161</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>FocusStacking</string>
+    </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+    <property name="tristate">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="focusStackingCommand">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>340</y>
+      <width>271</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="focusStackingCommandLabel">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>310</y>
+      <width>251</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Focus Stacking Command</string>
     </property>
    </widget>
   </widget>
