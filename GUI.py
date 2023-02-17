@@ -27,8 +27,8 @@ class GUI(QtWidgets.QMainWindow):
         self.gui.doFocusStacking.stateChanged.connect(self.clickDoFocusStackingCheckbox)
 
     def clickDoFocusStackingCheckbox(self):
-        self.gui.focusStackingCommandLabel.setVisible(not self.gui.focusStackingCommandLabel.isVisible())
-        self.gui.focusStackingCommand.setVisible(not self.gui.focusStackingCommand.isVisible())
+        self.gui.heliconFocusCommandPathLabel.setVisible(not self.gui.heliconFocusCommandPathLabel.isVisible())
+        self.gui.heliconFocusCommandPath.setVisible(not self.gui.heliconFocusCommandPath.isVisible())
 
     # def start(rawComands: str):
     def start(self):
@@ -56,7 +56,7 @@ class GUI(QtWidgets.QMainWindow):
         tmp_dir = self.gui.imageTmpPath.text() # tmp dir
         save_basedir = self.gui.imageSavePath.text() # save path
         brackets = self.gui.brackets.value() # num of brackets
-        focus_stacking_cmd = self.gui.focusStackingCommand.text() # focus stacking command path
+        focus_stacking_cmd = self.gui.heliconFocusCommandPath.text() # focus stacking command path
         try:
             for action in action_queue:
                 if action[0] == 'move':
