@@ -94,11 +94,15 @@ class GUI(QtWidgets.QMainWindow):
         if self.gui.doFocusStacking.isChecked() == True:
             # focus stacking
             original_images_dirs = os.listdir(os.path.join(save_basedir, 'original'))
-            stacking_images_dir = os.path.join(os.path.join(save_basedir), 'stacking')
-            os.makedirs(stacking_images_dir) # create stacking_images_dir
+            os.makedirs(os.path.join(save_basedir, 'stacking')) # create stacking images dir
             try:
                 for original_dir in original_images_dirs:
                     print(original_dir)
-                    subprocess.run([focus_stacking_cmd_path, '-silent', os.path.join(save_basedir, 'original', original_dir), '-save:' + os.path.join(stacking_images_dir, original_dir), '-mp:2', '-j:100'], check=True)
+                    subprocess.run([focus_stacking_cmd_path, \
+                                    '-silent', \
+                                    os.path.join(save_basedir, 'original', original_dir), \
+                                    '-save:' + os.path.join(save_basedir, 'stacking', original_dir + '.jpg'), \
+                                    '-mp:2', \
+                                    '-j:100'], check=True)
             except Exception as excpt :
                 print(excpt)
