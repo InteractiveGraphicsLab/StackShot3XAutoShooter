@@ -99,6 +99,6 @@ class GUI(QtWidgets.QMainWindow):
             try:
                 for original_dir in original_images_dirs:
                     print(original_dir)
-                    subprocess.run([focus_stacking_cmd_path, '-silent', original_dir, '-save:' + stacking_images_dir, '-mp:2', '-j:100'], check=True)
+                    subprocess.run([focus_stacking_cmd_path, '-silent', os.path.join(save_basedir, 'original', original_dir), '-save:' + os.path.join(stacking_images_dir, original_dir), '-mp:2', '-j:100'], check=True)
             except Exception as excpt :
                 print(excpt)
