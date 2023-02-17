@@ -23,7 +23,6 @@ class GUI(QtWidgets.QMainWindow):
 
         self.gui.startButton.clicked.connect(self.start)
 
-        self.doFocusStacking = True
         self.gui.doFocusStacking.stateChanged.connect(self.clickDoFocusStackingCheckbox)
 
     def clickDoFocusStackingCheckbox(self):
@@ -56,7 +55,12 @@ class GUI(QtWidgets.QMainWindow):
         tmp_dir = self.gui.imageTmpPath.text() # tmp dir
         save_basedir = self.gui.imageSavePath.text() # save path
         brackets = self.gui.brackets.value() # num of brackets
-        focus_stacking_cmd = self.gui.heliconFocusCommandPath.text() # focus stacking command path
+        focus_stacking_cmd_path = self.gui.heliconFocusCommandPath.text() # focus stacking command path
+        # debbug output
+        print("tmp dir:", tmp_dir)
+        print("save basedir", save_basedir)
+        print("brackets:", brackets)
+        print("focus stacking cmd path:", focus_stacking_cmd_path)
         try:
             for action in action_queue:
                 if action[0] == 'move':
@@ -87,7 +91,7 @@ class GUI(QtWidgets.QMainWindow):
         finally:
             controller.close()
 
-        if self.gui.doFocusStacking == True:
+        if self.gui.doFocusStacking.isChecked() == True:
             # focus stacking
             original_images_dirs = os.listdir(os.path.join(save_basedir, 'original'))
             stacking_images_dir = os.path.join(save_dir, 'stacking')
@@ -95,6 +99,6 @@ class GUI(QtWidgets.QMainWindow):
             try:
                 for original_dir in original_images_dirs:
                     print(original_dir)
-                    subprocess.run([focus_stacking_cmd, '-silent', original_dir, '-save:' + stacking_images_dir, '-mp:2', '-j:100'], check=True)
+                    subprocess.run([focus_stacking_cmd_path, '-silent', original_dir, '-save:' + stacking_images_dir, '-mp:2', '-j:100'], check=True)
             except Exception as excpt :
                 print(excpt)
