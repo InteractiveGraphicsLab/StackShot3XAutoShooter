@@ -94,7 +94,7 @@ class GUI(QtWidgets.QMainWindow):
         if self.gui.doFocusStacking.isChecked() == True:
             # focus stacking
             original_images_dirs = os.listdir(os.path.join(save_basedir, 'original'))
-            stacking_images_dir = os.path.join(save_dir, 'stacking')
+            stacking_images_dir = os.path.join(os.path.join(save_basedir), 'stacking')
             os.makedirs(stacking_images_dir) # create stacking_images_dir
             try:
                 for original_dir in original_images_dirs:
