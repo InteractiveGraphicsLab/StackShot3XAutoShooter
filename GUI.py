@@ -7,6 +7,8 @@ from PySide6 import QtWidgets
 from ui_Ui_MainWindow import Ui_MainWindow
 
 import os
+import usb.core
+import subprocess
 
 from commdefs import *
 from stackshot_controller import StackShotController
@@ -20,6 +22,12 @@ class GUI(QtWidgets.QMainWindow):
         self.gui.setupUi(self)
 
         self.gui.startButton.clicked.connect(self.start)
+
+        self.gui.doFocusStacking.stateChanged.connect(self.clickDoFocusStackingCheckbox)
+
+    def clickDoFocusStackingCheckbox(self):
+        self.gui.heliconFocusCommandPathLabel.setVisible(not self.gui.heliconFocusCommandPathLabel.isVisible())
+        self.gui.heliconFocusCommandPath.setVisible(not self.gui.heliconFocusCommandPath.isVisible())
 
     # def start(rawComands: str):
     def start(self):
@@ -36,15 +44,24 @@ class GUI(QtWidgets.QMainWindow):
         controller = StackShotController()
         try:
             controller.open()
+            controller.stop(RailAxis.COMM_RAIL_AXIS_X)
+            controller.stop(RailAxis.COMM_RAIL_AXIS_Y)
+            controller.stop(RailAxis.COMM_RAIL_AXIS_Z)
         except Exception as excpt:
             print(excpt)
             return
 
+        shutter_count = 0
+        tmp_dir = self.gui.imageTmpPath.text() # tmp dir
+        save_basedir = self.gui.imageSavePath.text() # save path
+        brackets = self.gui.brackets.value() # num of brackets
+        focus_stacking_cmd_path = self.gui.heliconFocusCommandPath.text() # focus stacking command path
+        # debbug output
+        print("tmp dir:", tmp_dir)
+        print("save basedir", save_basedir)
+        print("brackets:", brackets)
+        print("focus stacking cmd path:", focus_stacking_cmd_path)
         try:
-            shutter_count = 0
-            tmp_dir = self.gui.imageTmpPath.text() # tmp dir
-            save_basedir = self.gui.imageSavePath.text() # save path
-            brackets = self.gui.brackets.value() # num of brackets
             for action in action_queue:
                 if action[0] == 'move':
                     if action[1] == 'x':
@@ -61,7 +78,7 @@ class GUI(QtWidgets.QMainWindow):
                     image_paths.sort(key=os.path.getmtime, reverse=True) # desc images timestamp
                     save_image_paths = image_paths[:brackets]
 
-                    save_dir = os.path.join(save_basedir, str(shutter_count).zfill(4)) # image save dir
+                    save_dir = os.path.join(save_basedir, 'original', str(shutter_count).zfill(4)) # image save dir
                     os.makedirs(save_dir) # create image save dir
                     for image_path in save_image_paths:
                         image_name = os.path.basename(image_path)
@@ -73,3 +90,19 @@ class GUI(QtWidgets.QMainWindow):
 
         finally:
             controller.close()
+
+        if self.gui.doFocusStacking.isChecked() == True:
+            # focus stacking
+            original_images_dirs = os.listdir(os.path.join(save_basedir, 'original'))
+            os.makedirs(os.path.join(save_basedir, 'stacking')) # create stacking images dir
+            try:
+                for original_dir in original_images_dirs:
+                    print(original_dir)
+                    subprocess.run([focus_stacking_cmd_path, \
+                                    '-silent', \
+                                    os.path.join(save_basedir, 'original', original_dir), \
+                                    '-save:' + os.path.join(save_basedir, 'stacking', original_dir + '.jpg'), \
+                                    '-mp:2', \
+                                    '-j:100'], check=True)
+            except Exception as excpt :
+                print(excpt)

@@ -50,7 +50,7 @@
      <string>stop</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="actionsLabel">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -68,10 +68,10 @@
      <string>Actions</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
+   <widget class="QLabel" name="imageTmpPathLabel">
     <property name="geometry">
      <rect>
-      <x>510</x>
+      <x>500</x>
       <y>30</y>
       <width>161</width>
       <height>31</height>
@@ -86,10 +86,10 @@
      <string>Image Tmp Path</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_3">
+   <widget class="QLabel" name="imageSavePathLabel">
     <property name="geometry">
      <rect>
-      <x>510</x>
+      <x>500</x>
       <y>110</y>
       <width>161</width>
       <height>31</height>
@@ -107,9 +107,9 @@
    <widget class="QLineEdit" name="imageTmpPath">
     <property name="geometry">
      <rect>
-      <x>510</x>
+      <x>500</x>
       <y>60</y>
-      <width>271</width>
+      <width>281</width>
       <height>31</height>
      </rect>
     </property>
@@ -117,17 +117,17 @@
    <widget class="QLineEdit" name="imageSavePath">
     <property name="geometry">
      <rect>
-      <x>510</x>
+      <x>500</x>
       <y>140</y>
-      <width>271</width>
+      <width>281</width>
       <height>31</height>
      </rect>
     </property>
    </widget>
-   <widget class="QLabel" name="label_4">
+   <widget class="QLabel" name="bracketsLabel">
     <property name="geometry">
      <rect>
-      <x>510</x>
+      <x>500</x>
       <y>190</y>
       <width>111</width>
       <height>31</height>
@@ -145,7 +145,7 @@
    <widget class="QSpinBox" name="brackets">
     <property name="geometry">
      <rect>
-      <x>510</x>
+      <x>500</x>
       <y>220</y>
       <width>51</width>
       <height>31</height>
@@ -153,6 +153,61 @@
     </property>
     <property name="minimum">
      <number>1</number>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="doFocusStacking">
+    <property name="geometry">
+     <rect>
+      <x>500</x>
+      <y>270</y>
+      <width>161</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>FocusStacking</string>
+    </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+    <property name="tristate">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="heliconFocusCommandPath">
+    <property name="geometry">
+     <rect>
+      <x>500</x>
+      <y>340</y>
+      <width>281</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="heliconFocusCommandPathLabel">
+    <property name="geometry">
+     <rect>
+      <x>500</x>
+      <y>310</y>
+      <width>281</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>HeliconFocus Command Path</string>
     </property>
    </widget>
   </widget>
