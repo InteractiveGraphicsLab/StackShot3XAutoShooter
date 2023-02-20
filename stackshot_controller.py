@@ -21,7 +21,7 @@ class StackShotController:
         self.units = RailUnits.COMM_RAIL_UNITS_METRIC
         self.backlash = False
 
-    def send_command(self, axis: RailAxis, cmd: Cmd, action: Action, data: bytearray | None, lenIn: int):
+    def send_command(self, axis: RailAxis, cmd: Cmd, action: Action, data: bytearray, lenIn: int):
         cmd = int(cmd)
         if axis == RailAxis.COMM_RAIL_AXIS_ANY:
             action = (int(action) | (int(axis)   << 4))
