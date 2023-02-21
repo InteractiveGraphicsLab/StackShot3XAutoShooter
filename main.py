@@ -7,11 +7,11 @@ from pyftdi.ftdi import Ftdi
 from commdefs import *
 from stackshot_controller import StackShotController
 
-from GUI import GUI
+from main_window import MainWindow
 
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
-    gui = GUI()
-    gui.show()
+    main_window = MainWindow()
+    main_window.show()
     sys.exit(app.exec())
