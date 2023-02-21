@@ -5,7 +5,7 @@ from PySide6 import QtWidgets
 #     pyside6-uic form.ui -o ui_form.py, or
 #     pyside2-uic form.ui -o ui_form.py
 from ui_MainWindow import Ui_MainWindow
-from ui_Preferences import Ui_Preferences
+from preferences_window import PreferencesWindow
 
 import os
 import usb.core
@@ -19,34 +19,34 @@ from action_parser import action_parser
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
-        self.window = Ui_MainWindow()
-        self.window.setupUi(self)
+        self.main_window = Ui_MainWindow()
+        self.main_window.setupUi(self)
 
-        self.window.startButton.clicked.connect(self.start)
+        self.main_window.startButton.clicked.connect(self.start)
 
-        self.window.doFocusStacking.stateChanged.connect(self.clickDoFocusStackingCheckbox)
-        self.window.doMetashape.stateChanged.connect(self.clickDoMetashapeCheckbox)
+        self.main_window.doFocusStacking.stateChanged.connect(self.clickDoFocusStackingCheckbox)
+        self.main_window.doMetashape.stateChanged.connect(self.clickDoMetashapeCheckbox)
 
-        self.window.actionPreference.triggered.connect(self.showPreferences)
+        self.main_window.actionPreference.triggered.connect(self.showPreferences)
 
-        self.preferences = Ui_Preferences()
+        self.preferences_window = PreferencesWindow()
 
     def clickDoFocusStackingCheckbox(self):
-        self.window.heliconFocusCommandPathLabel.setVisible(not self.window.heliconFocusCommandPathLabel.isVisible())
-        self.window.heliconFocusCommandPath.setVisible(not self.window.heliconFocusCommandPath.isVisible())
+        self.main_window.heliconFocusCommandPathLabel.setVisible(not self.main_window.heliconFocusCommandPathLabel.isVisible())
+        self.main_window.heliconFocusCommandPath.setVisible(not self.main_window.heliconFocusCommandPath.isVisible())
 
     def clickDoMetashapeCheckbox(self):
-        self.window.metashapeCommandPathLabel.setVisible(not self.window.metashapeCommandPathLabel.isVisible())
-        self.window.metashapeCommandPath.setVisible(not self.window.metashapeCommandPath.isVisible())
-        self.window.metashapeProjectPathLabel.setVisible(not self.window.metashapeProjectPathLabel.isVisible())
-        self.window.metashapeProjectPath.setVisible(not self.window.metashapeProjectPath.isVisible())
+        self.main_window.metashapeCommandPathLabel.setVisible(not self.main_window.metashapeCommandPathLabel.isVisible())
+        self.main_window.metashapeCommandPath.setVisible(not self.main_window.metashapeCommandPath.isVisible())
+        self.main_window.metashapeProjectPathLabel.setVisible(not self.main_window.metashapeProjectPathLabel.isVisible())
+        self.main_window.metashapeProjectPath.setVisible(not self.main_window.metashapeProjectPath.isVisible())
 
     def showPreferences(self):
-        self.preferences.setupUi(self)
+        self.preferences_window.show()
 
     # def start(rawComands: str):
     def start(self):
-        raw_actions = self.window.actionsText.toPlainText()
+        raw_actions = self.main_window.actionsText.toPlainText()
 
         # validation
         try:
@@ -67,10 +67,10 @@ class MainWindow(QtWidgets.QMainWindow):
             return
 
         shutter_count = 0
-        tmp_dir = self.window.imageTmpPath.text() # tmp dir
-        save_basedir = self.window.imageSavePath.text() # save path
-        brackets = self.window.brackets.value() # num of brackets
-        focus_stacking_cmd_path = self.window.heliconFocusCommandPath.text() # focus stacking command path
+        tmp_dir = self.main_window.imageTmpPath.text() # tmp dir
+        save_basedir = self.main_window.imageSavePath.text() # save path
+        brackets = self.main_window.brackets.value() # num of brackets
+        focus_stacking_cmd_path = self.main_window.heliconFocusCommandPath.text() # focus stacking command path
         # debbug output
         print("tmp dir:", tmp_dir)
         print("save basedir", save_basedir)
@@ -106,7 +106,7 @@ class MainWindow(QtWidgets.QMainWindow):
         finally:
             controller.close()
 
-        if self.window.doFocusStacking.isChecked() == True:
+        if self.main_window.doFocusStacking.isChecked() == True:
             # focus stacking
             original_images_dirs = os.listdir(os.path.join(save_basedir, 'original'))
             os.makedirs(os.path.join(save_basedir, 'stacking')) # create stacking images dir
@@ -122,9 +122,9 @@ class MainWindow(QtWidgets.QMainWindow):
             except Exception as excpt :
                 print(excpt)
 
-        if self.window.doMetashape.isChecked() == True:
+        if self.main_window.doMetashape.isChecked() == True:
             # metashape
             env = os.environ
             env['IMAGE_PATH'] = os.path.join(save_basedir, 'stacking')
-            env['METASHAPE_PROJECT_PATH'] = self.window.metashapeProjectPath.text()
-            subprocess.run([self.window.metashapeCommandPath.text(), '-r', 'metashape_script.py'], env=env)
+            env['METASHAPE_PROJECT_PATH'] = self.main_window.metashapeProjectPath.text()
+            subprocess.run([self.main_window.metashapeCommandPath.text(), '-r', 'metashape_script.py'], env=env)
