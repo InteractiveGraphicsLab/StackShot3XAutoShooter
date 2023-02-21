@@ -320,7 +320,7 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionPreference">
    <property name="text">
-    <string>Preference</string>
+    <string>Preferences</string>
    </property>
   </action>
  </widget>

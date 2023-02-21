@@ -126,7 +126,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.actionPreference.setText(QCoreApplication.translate("MainWindow", u"Preference", None))
+        self.actionPreference.setText(QCoreApplication.translate("MainWindow", u"Preferences", None))
         self.startButton.setText(QCoreApplication.translate("MainWindow", u"start", None))
         self.stopButton.setText(QCoreApplication.translate("MainWindow", u"stop", None))
         self.actionsLabel.setText(QCoreApplication.translate("MainWindow", u"Actions", None))
