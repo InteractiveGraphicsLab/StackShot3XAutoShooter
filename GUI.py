@@ -24,10 +24,17 @@ class GUI(QtWidgets.QMainWindow):
         self.gui.startButton.clicked.connect(self.start)
 
         self.gui.doFocusStacking.stateChanged.connect(self.clickDoFocusStackingCheckbox)
+        self.gui.doMetashape.stateChanged.connect(self.clickDoMetashapeCheckbox)
 
     def clickDoFocusStackingCheckbox(self):
         self.gui.heliconFocusCommandPathLabel.setVisible(not self.gui.heliconFocusCommandPathLabel.isVisible())
         self.gui.heliconFocusCommandPath.setVisible(not self.gui.heliconFocusCommandPath.isVisible())
+
+    def clickDoMetashapeCheckbox(self):
+        self.gui.metashapeCommandPathLabel.setVisible(not self.gui.metashapeCommandPathLabel.isVisible())
+        self.gui.metashapeCommandPath.setVisible(not self.gui.metashapeCommandPath.isVisible())
+        self.gui.metashapeProjectPathLabel.setVisible(not self.gui.metashapeProjectPathLabel.isVisible())
+        self.gui.metashapeProjectPath.setVisible(not self.gui.metashapeProjectPath.isVisible())
 
     # def start(rawComands: str):
     def start(self):
@@ -106,3 +113,10 @@ class GUI(QtWidgets.QMainWindow):
                                     '-j:100'], check=True)
             except Exception as excpt :
                 print(excpt)
+
+        if self.gui.doMetashape.isChecked() == True:
+            # metashape
+            env = os.environ
+            env['IMAGE_PATH'] = os.path.join(save_basedir, 'stacking')
+            env['METASHAPE_PROJECT_PATH'] = self.gui.metashapeProjectPath.text()
+            subprocess.run([self.gui.metashapeCommandPath.text(), '-r', 'metashape_script.py'], env=env)
