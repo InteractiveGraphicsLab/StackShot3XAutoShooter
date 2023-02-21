@@ -27,6 +27,15 @@ def create_action_queue(action_list: list):
     return queue
 
 
+def isfloat(s):
+    try:
+        float(s)
+    except ValueError:
+        return False
+    else:
+        return True
+
+
 # NOTE validate negative digit
 # return action queue
 def action_parser(raw_action: str):
@@ -45,7 +54,7 @@ def action_parser(raw_action: str):
             loop_count -= 1
         elif action[0] == 'move' and len(action) == 3 and \
           (action[1] == 'x' or action[1] == 'y' or action[1] == 'z') and \
-          action[2].isdigit(): # NOTE: add velocity?
+          isfloat(action[2]): # NOTE: add velocity?
             action_list.append(action)
         elif action[0] == 'shutter' and len(action) == 1:
             action_list.append(action)
