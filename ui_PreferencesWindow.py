@@ -25,7 +25,7 @@ class Ui_PreferencesWindow(object):
         if not PreferencesWindow.objectName():
             PreferencesWindow.setObjectName(u"PreferencesWindow")
         PreferencesWindow.setEnabled(True)
-        PreferencesWindow.resize(485, 400)
+        PreferencesWindow.resize(539, 400)
         self.horizontalLayout_3 = QHBoxLayout(PreferencesWindow)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.verticalLayout = QVBoxLayout()
@@ -123,20 +123,60 @@ class Ui_PreferencesWindow(object):
         self.formLayout_2.setLayout(2, QFormLayout.FieldRole, self.horizontalLayout_2)
 
         self.tabWidget.addTab(self.General, "")
-        self.FocusStacking = QWidget()
-        self.FocusStacking.setObjectName(u"FocusStacking")
-        self.tabWidget.addTab(self.FocusStacking, "")
+        self.Focus_Stacking = QWidget()
+        self.Focus_Stacking.setObjectName(u"Focus_Stacking")
+        self.horizontalLayout_5 = QHBoxLayout(self.Focus_Stacking)
+        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+        self.formLayout = QFormLayout()
+        self.formLayout.setObjectName(u"formLayout")
+        self.heliconfocusCommandPathLabel = QLabel(self.Focus_Stacking)
+        self.heliconfocusCommandPathLabel.setObjectName(u"heliconfocusCommandPathLabel")
+        self.heliconfocusCommandPathLabel.setMinimumSize(QSize(175, 25))
+        self.heliconfocusCommandPathLabel.setMaximumSize(QSize(105, 25))
+
+        self.formLayout.setWidget(0, QFormLayout.LabelRole, self.heliconfocusCommandPathLabel)
+
+        self.horizontalLayout_4 = QHBoxLayout()
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.heliconfocusCommandPath = QLabel(self.Focus_Stacking)
+        self.heliconfocusCommandPath.setObjectName(u"heliconfocusCommandPath")
+        self.heliconfocusCommandPath.setMinimumSize(QSize(0, 25))
+        self.heliconfocusCommandPath.setMaximumSize(QSize(16777215, 25))
+        self.heliconfocusCommandPath.setFrameShape(QFrame.StyledPanel)
+        self.heliconfocusCommandPath.setFrameShadow(QFrame.Plain)
+
+        self.horizontalLayout_4.addWidget(self.heliconfocusCommandPath)
+
+        self.heliconFocusCommandPathReferenceButton = QPushButton(self.Focus_Stacking)
+        self.heliconFocusCommandPathReferenceButton.setObjectName(u"heliconFocusCommandPathReferenceButton")
+        sizePolicy.setHeightForWidth(self.heliconFocusCommandPathReferenceButton.sizePolicy().hasHeightForWidth())
+        self.heliconFocusCommandPathReferenceButton.setSizePolicy(sizePolicy)
+        self.heliconFocusCommandPathReferenceButton.setMinimumSize(QSize(80, 25))
+        self.heliconFocusCommandPathReferenceButton.setMaximumSize(QSize(80, 25))
+        self.heliconFocusCommandPathReferenceButton.setIconSize(QSize(16, 16))
+        self.heliconFocusCommandPathReferenceButton.setAutoDefault(False)
+        self.heliconFocusCommandPathReferenceButton.setFlat(False)
+
+        self.horizontalLayout_4.addWidget(self.heliconFocusCommandPathReferenceButton)
+
+
+        self.formLayout.setLayout(0, QFormLayout.FieldRole, self.horizontalLayout_4)
+
+
+        self.horizontalLayout_5.addLayout(self.formLayout)
+
+        self.tabWidget.addTab(self.Focus_Stacking, "")
         self.Metashape = QWidget()
         self.Metashape.setObjectName(u"Metashape")
         self.tabWidget.addTab(self.Metashape, "")
 
         self.verticalLayout.addWidget(self.tabWidget)
 
-        self.buttonBox = QDialogButtonBox(PreferencesWindow)
-        self.buttonBox.setObjectName(u"buttonBox")
-        self.buttonBox.setStandardButtons(QDialogButtonBox.Cancel|QDialogButtonBox.Ok)
+        self.updateConfig = QDialogButtonBox(PreferencesWindow)
+        self.updateConfig.setObjectName(u"updateConfig")
+        self.updateConfig.setStandardButtons(QDialogButtonBox.Cancel|QDialogButtonBox.Ok)
 
-        self.verticalLayout.addWidget(self.buttonBox)
+        self.verticalLayout.addWidget(self.updateConfig)
 
 
         self.horizontalLayout_3.addLayout(self.verticalLayout)
@@ -144,9 +184,10 @@ class Ui_PreferencesWindow(object):
 
         self.retranslateUi(PreferencesWindow)
 
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         self.imageSrcFolderReferenceButton.setDefault(False)
         self.imageSaveFolderReferenceButton.setDefault(False)
+        self.heliconFocusCommandPathReferenceButton.setDefault(False)
 
 
         QMetaObject.connectSlotsByName(PreferencesWindow)
@@ -162,7 +203,10 @@ class Ui_PreferencesWindow(object):
         self.imageSaveFolderPath.setText(QCoreApplication.translate("PreferencesWindow", u"Not Selected.", None))
         self.imageSaveFolderReferenceButton.setText(QCoreApplication.translate("PreferencesWindow", u"Reference", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.General), QCoreApplication.translate("PreferencesWindow", u"General", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.FocusStacking), QCoreApplication.translate("PreferencesWindow", u"FocusStacking", None))
+        self.heliconfocusCommandPathLabel.setText(QCoreApplication.translate("PreferencesWindow", u"HeliconFocus Command PATH", None))
+        self.heliconfocusCommandPath.setText(QCoreApplication.translate("PreferencesWindow", u"Not Selected.", None))
+        self.heliconFocusCommandPathReferenceButton.setText(QCoreApplication.translate("PreferencesWindow", u"Reference", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.Focus_Stacking), QCoreApplication.translate("PreferencesWindow", u"Focus Stacking", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.Metashape), QCoreApplication.translate("PreferencesWindow", u"Metashape", None))
     # retranslateUi
 
