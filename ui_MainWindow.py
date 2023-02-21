@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'Ui_MainWindow.ui'
+## Form generated from reading UI file 'MainWindow.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.4.2
 ##
@@ -26,6 +26,8 @@ class Ui_MainWindow(object):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(800, 630)
+        self.actionPreference = QAction(MainWindow)
+        self.actionPreference.setObjectName(u"actionPreference")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.actionsText = QPlainTextEdit(self.centralwidget)
@@ -106,12 +108,16 @@ class Ui_MainWindow(object):
         self.menubar.setGeometry(QRect(0, 0, 800, 22))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
+        self.menuEdit = QMenu(self.menubar)
+        self.menuEdit.setObjectName(u"menuEdit")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
         self.menubar.addAction(self.menuFile.menuAction())
+        self.menubar.addAction(self.menuEdit.menuAction())
+        self.menuEdit.addAction(self.actionPreference)
 
         self.retranslateUi(MainWindow)
 
@@ -120,6 +126,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
+        self.actionPreference.setText(QCoreApplication.translate("MainWindow", u"Preference", None))
         self.startButton.setText(QCoreApplication.translate("MainWindow", u"start", None))
         self.stopButton.setText(QCoreApplication.translate("MainWindow", u"stop", None))
         self.actionsLabel.setText(QCoreApplication.translate("MainWindow", u"Actions", None))
@@ -132,5 +139,6 @@ class Ui_MainWindow(object):
         self.metashapeCommandPathLabel.setText(QCoreApplication.translate("MainWindow", u"Metashape Command Path", None))
         self.metashapeProjectPathLabel.setText(QCoreApplication.translate("MainWindow", u"Metashape Project Path", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
+        self.menuEdit.setTitle(QCoreApplication.translate("MainWindow", u"Edit", None))
     # retranslateUi
 
