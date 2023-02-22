@@ -74,9 +74,9 @@ class GUI(QtWidgets.QMainWindow):
 
         # general/metashape_project_folder
         if 'metashape_project_folder' in self.config['general'] and 0 < len(self.config['general']['metashape_project_folder']):
-            self.gui.imageSaveFolderPath.setText(self.config['general']['metashape_project_folder'])
+            self.gui.metashapeProjectFolderPath.setText(self.config['general']['metashape_project_folder'])
         else:
-            self.gui.imageSaveFolderPath.setText('Not selected.')
+            self.gui.metashapeProjectFolderPath.setText('Not selected.')
 
     def updateImageSrcFolder(self):
         file = QtWidgets.QFileDialog.getExistingDirectory()
