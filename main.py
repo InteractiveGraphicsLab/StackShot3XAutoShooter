@@ -7,7 +7,7 @@ from pyftdi.ftdi import Ftdi
 from commdefs import *
 from stackshot_controller import StackShotController
 
-from GUI import GUI
+from gui import GUI
 
 
 if __name__ == '__main__':
