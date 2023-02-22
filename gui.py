@@ -37,15 +37,18 @@ class GUI(QtWidgets.QMainWindow):
 
         self.gui.startButton.clicked.connect(self.start)
 
-        self.gui.imageSrcFolderReferenceButton.clicked.connect(self.getImageSrcFolder)
-        self.gui.imageSaveFolderReferenceButton.clicked.connect(self.getImageSaveFolder)
-        self.gui.heliconFocusCommandPathReferenceButton.clicked.connect(self.getHeliconFocusCommandPath)
+        self.gui.tabWidget.currentChanged.connect(self.updateConfig)
+
+        self.gui.imageSrcFolderReferenceButton.clicked.connect(self.updateImageSrcFolder)
+        self.gui.imageSaveFolderReferenceButton.clicked.connect(self.updateImageSaveFolder)
 
         self.config = configparser.ConfigParser()
         self.loadConfig()
 
     def loadConfig(self):
         self.config.read('config.ini')
+        if not 'general' in self.config:
+            self.config['general'] = {}
         # general/brackets
         if 'brackets' in self.config['general'] and \
             isValidBrackets(self.config['general']['brackets'], \
@@ -70,13 +73,30 @@ class GUI(QtWidgets.QMainWindow):
         else:
             self.gui.imageSaveFolderPath.setText('Not selected.')
 
+        if not 'helicon_focus' in self.config:
+            self.config['heliconfocus'] = {}
+
         # heliconfocus/heliconfocus_command_path
         if 'heliconfocus_command_path' in self.config['heliconfocus'] and 0 < len(self.config['heliconfocus']['heliconfocus_command_path']):
             self.gui.heliconfocusCommandPath.setText(self.config['heliconfocus']['heliconfocus_command_path'])
         else:
             self.gui.heliconfocusCommandPath.setText('Not selected.')
 
-    def getImageSrcFolder(self):
+    def updateConfig(self):
+        if self.gui.tabWidget.currentIndex() == 1:
+            return
+
+        if self.gui.heliconfocusCommandPath.text() != 'Not selected.':
+            self.config['heliconfocus']['heliconfocus_command_path'] = self.gui.heliconfocusCommandPath.text()
+
+        if self.gui.heliconfocusCommandPath.text() != 'Not selected.':
+            self.config['metashape']['metashape_command_path'] = self.gui.metashapeCommandPath.text()
+
+        f = open('config.ini', 'w')
+        self.config.write(f)
+        f.close()
+
+    def updateImageSrcFolder(self):
         file = QtWidgets.QFileDialog.getExistingDirectory()
         if len(file) != 0:
             self.gui.imageSrcFolderPath.setText(file)
@@ -85,20 +105,11 @@ class GUI(QtWidgets.QMainWindow):
             self.config.write(f)
             f.close()
 
-    def getImageSaveFolder(self):
+    def updateImageSaveFolder(self):
         file = QtWidgets.QFileDialog.getExistingDirectory()
         if len(file) != 0:
             self.gui.imageSaveFolderPath.setText(file)
             self.config['general']['image_save_folder'] = self.gui.imageSaveFolderPath.text()
-            f = open('config.ini', 'w')
-            self.config.write(f)
-            f.close()
-
-    def getHeliconFocusCommandPath(self):
-        file, check = QtWidgets.QFileDialog.getOpenFileUrl()
-        if check:
-            self.gui.heliconfocusCommandPath.setText(file.url())
-            self.config['heliconfocus']['heliconfocus_command_path'] = self.gui.heliconfocusCommandPath.text()
             f = open('config.ini', 'w')
             self.config.write(f)
             f.close()

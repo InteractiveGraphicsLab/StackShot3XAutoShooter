@@ -537,9 +537,9 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="Preferences">
+      <widget class="QWidget" name="Configuration">
        <attribute name="title">
-        <string>Preferences</string>
+        <string>Configuration</string>
        </attribute>
        <layout class="QFormLayout" name="formLayout">
         <item row="0" column="0">
