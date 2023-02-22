@@ -39,6 +39,7 @@ class GUI(QtWidgets.QMainWindow):
 
         self.gui.imageSrcFolderReferenceButton.clicked.connect(self.updateImageSrcFolder)
         self.gui.imageSaveFolderReferenceButton.clicked.connect(self.updateImageSaveFolder)
+        self.gui.metashapeProjectFolderPathReferenceButton.clicked.connect(self.updateMetashapeProjectFolder)
 
         self.config = configparser.ConfigParser()
         self.loadConfig()
@@ -85,6 +86,15 @@ class GUI(QtWidgets.QMainWindow):
         if len(file) != 0:
             self.gui.imageSaveFolderPath.setText(file)
             self.config['general']['image_save_folder'] = self.gui.imageSaveFolderPath.text()
+            f = open('config.ini', 'w')
+            self.config.write(f)
+            f.close()
+
+    def updateMetashapeProjectFolder(self):
+        file = QtWidgets.QFileDialog.getExistingDirectory()
+        if len(file) != 0:
+            self.gui.metashapeProjectFolderPath.setText(file)
+            self.config['general']['metashape_project_folder'] = self.gui.metashapeProjectFolderPath.text()
             f = open('config.ini', 'w')
             self.config.write(f)
             f.close()
