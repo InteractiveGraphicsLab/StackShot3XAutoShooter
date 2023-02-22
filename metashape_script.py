@@ -10,8 +10,6 @@ Metashape.app.cpu_enable = False
 Metashape.app.gpu_mask = 1 ##
 
 doc = Metashape.Document()
-# projectname = 'testproject'
-# project_dir = os.path.join('C:\\Users\\yyabumot\\Desktop\\metashape_api', projectname)
 project_dir = env['METASHAPE_PROJECT_PATH']
 
 doc.save(path=os.path.join(project_dir, 'project.psz'))
@@ -53,13 +51,8 @@ for d in [0, 1, 2, 4, 8]:
 print("Build Depth Maps...")
 chunk.buildDepthMaps(downscale=1, filter_mode=Metashape.FilterMode.MildFiltering, reuse_depth=False)
 
-# Build Point Cloud
-# chunk.buildPointCloud(source_data=Metashape.DataSource.DepthMapsData, point_colors=True, point_confidence=False, )
-
 # Build Mesh
 print("Build Mesh...")
-# chunk.buildModel(surface_type=Metashape.SurfaceType.Arbitrary, interpolation=Metashape.Interpolation.EnabledInterpolation, face_count=Metashape.FaceCount.HighFaceCount, \
-#                 source_data=Metashape.DataSource.PointCloudData, vertex_colors=True, )
 chunk.buildModel(surface_type=Metashape.SurfaceType.Arbitrary, interpolation=Metashape.Interpolation.EnabledInterpolation, \
                  face_count=Metashape.FaceCount.HighFaceCount, source_data=Metashape.DataSource.DepthMapsData, vertex_colors=True, volumetric_masks=False)
 
