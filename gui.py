@@ -185,4 +185,4 @@ class GUI(QtWidgets.QMainWindow):
             env = os.environ
             env['IMAGE_PATH'] = os.path.join(save_basedir, 'stacking')
             env['METASHAPE_PROJECT_PATH'] = self.gui.metashapeProjectFolderPath.text()
-            subprocess.run([self.config['general']['metashape_command_path'], '-r', 'metashape_script.py'], env=env)
+            subprocess.run([self.config['general']['metashape_command_path'], '--gui', '-r', 'metashape_script.py'], env=env)
