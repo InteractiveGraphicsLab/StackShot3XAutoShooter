@@ -36,6 +36,7 @@ class GUI(QtWidgets.QMainWindow):
         self.gui.setupUi(self)
 
         self.gui.startButton.clicked.connect(self.start)
+        self.gui.stopButton.clicked.connect(self.stop)
 
         self.gui.imageSrcFolderReferenceButton.clicked.connect(self.updateImageSrcFolder)
         self.gui.imageSaveFolderReferenceButton.clicked.connect(self.updateImageSaveFolder)
@@ -43,6 +44,8 @@ class GUI(QtWidgets.QMainWindow):
 
         self.config = configparser.ConfigParser()
         self.loadConfig()
+
+        self.stop_flag = False
 
     def loadConfig(self):
         self.config.read('config.ini')
@@ -107,6 +110,7 @@ class GUI(QtWidgets.QMainWindow):
 
     def start(self):
         raw_actions = self.gui.actionsText.toPlainText()
+        self.stop_flag = False
 
         # validation
         try:
@@ -136,6 +140,9 @@ class GUI(QtWidgets.QMainWindow):
         print("brackets:", brackets)
         try:
             for action in action_queue:
+                if self.stop_flag == True:
+                    return
+
                 if action[0] == 'move':
                     if action[1] == 'x':
                         controller.move(RailAxis.COMM_RAIL_AXIS_X, RailDir.COMM_RAIL_DIR_FWD, float(action[2]))
@@ -170,7 +177,9 @@ class GUI(QtWidgets.QMainWindow):
             os.makedirs(os.path.join(save_basedir, 'stacking')) # create stacking images dir
             try:
                 for original_dir in original_images_dirs:
-                    print(original_dir)
+                    if self.stop_flag == True:
+                        return
+
                     subprocess.run([self.config['general']['heliconfocus_command_path'], \
                                     '-silent', \
                                     os.path.join(save_basedir, 'original', original_dir), \
@@ -186,3 +195,6 @@ class GUI(QtWidgets.QMainWindow):
             env['IMAGE_PATH'] = os.path.join(save_basedir, 'stacking')
             env['METASHAPE_PROJECT_PATH'] = self.gui.metashapeProjectFolderPath.text()
             subprocess.run([self.config['general']['metashape_command_path'], '--gui', '-r', 'metashape_script.py'], env=env)
+
+    def stop(self):
+        self.stop_flag = True
