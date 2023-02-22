@@ -11,6 +11,7 @@ import usb.core
 import subprocess
 import configparser
 
+from multiprocessing import Process
 from commdefs import *
 from stackshot_controller import StackShotController
 from action_parser import action_parser
@@ -45,7 +46,7 @@ class GUI(QtWidgets.QMainWindow):
         self.config = configparser.ConfigParser()
         self.loadConfig()
 
-        self.stop_flag = False
+        self.current_process = None
 
     def loadConfig(self):
         self.config.read('config.ini')
@@ -109,6 +110,21 @@ class GUI(QtWidgets.QMainWindow):
             f.close()
 
     def start(self):
+        self.current_process = Process(target=self.exec_action)
+        self.current_process.start()
+        self.gui.startButton.setEnabled(False)
+        self.gui.startButton.setText('running')
+        self.current_process.join()
+        self.gui.startButton.setEnabled(True)
+        self.gui.startButton.setText('start')
+        self.current_process = None
+
+    def stop(self):
+        if self.current_process != None:
+            self.current_process.kill()
+
+
+    def exec_action(self):
         raw_actions = self.gui.actionsText.toPlainText()
         self.stop_flag = False
 
@@ -195,6 +211,3 @@ class GUI(QtWidgets.QMainWindow):
             env['IMAGE_PATH'] = os.path.join(save_basedir, 'stacking')
             env['METASHAPE_PROJECT_PATH'] = self.gui.metashapeProjectFolderPath.text()
             subprocess.run([self.config['general']['metashape_command_path'], '--gui', '-r', 'metashape_script.py'], env=env)
-
-    def stop(self):
-        self.stop_flag = True
