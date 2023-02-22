@@ -9,10 +9,24 @@ from ui_MainWindow import Ui_MainWindow
 import os
 import usb.core
 import subprocess
+import configparser
 
 from commdefs import *
 from stackshot_controller import StackShotController
 from action_parser import action_parser
+
+
+def isValidBrackets(s, min, max):
+    try:
+        int(s)
+    except ValueError:
+        return False
+
+    b = int(s)
+    if min <= b <= max:
+        return True
+    else:
+        return False
 
 
 class GUI(QtWidgets.QMainWindow):
@@ -23,7 +37,72 @@ class GUI(QtWidgets.QMainWindow):
 
         self.gui.startButton.clicked.connect(self.start)
 
-    # def start(rawComands: str):
+        self.gui.imageSrcFolderReferenceButton.clicked.connect(self.getImageSrcFolder)
+        self.gui.imageSaveFolderReferenceButton.clicked.connect(self.getImageSaveFolder)
+        self.gui.heliconFocusCommandPathReferenceButton.clicked.connect(self.getHeliconFocusCommandPath)
+
+        self.config = configparser.ConfigParser()
+        self.loadConfig()
+
+    def loadConfig(self):
+        self.config.read('config.ini')
+        # general/brackets
+        if 'brackets' in self.config['general'] and \
+            isValidBrackets(self.config['general']['brackets'], \
+                            self.gui.brackets.minimum(), self.gui.brackets.maximum()) == True:
+            self.gui.brackets.setValue(int(self.config['general']['brackets']))
+        else:
+            self.gui.brackets.setValue(self.gui.brackets.minimum())
+            self.config['general']['brackets'] = str(self.gui.brackets.minimum())
+            f = open('config.ini', 'w')
+            self.config.write(f)
+            f.close()
+
+        # general/image_src_folder
+        if 'image_src_folder' in self.config['general'] and 0 < len(self.config['general']['image_src_folder']):
+            self.gui.imageSrcFolderPath.setText(self.config['general']['image_src_folder'])
+        else:
+            self.gui.imageSrcFolderPath.setText('Not selected.')
+
+        # general/image_save_folder
+        if 'image_save_folder' in self.config['general'] and 0 < len(self.config['general']['image_save_folder']):
+            self.gui.imageSaveFolderPath.setText(self.config['general']['image_save_folder'])
+        else:
+            self.gui.imageSaveFolderPath.setText('Not selected.')
+
+        # heliconfocus/heliconfocus_command_path
+        if 'heliconfocus_command_path' in self.config['heliconfocus'] and 0 < len(self.config['heliconfocus']['heliconfocus_command_path']):
+            self.gui.heliconfocusCommandPath.setText(self.config['heliconfocus']['heliconfocus_command_path'])
+        else:
+            self.gui.heliconfocusCommandPath.setText('Not selected.')
+
+    def getImageSrcFolder(self):
+        file = QtWidgets.QFileDialog.getExistingDirectory()
+        if len(file) != 0:
+            self.gui.imageSrcFolderPath.setText(file)
+            self.config['general']['image_src_folder'] = self.gui.imageSrcFolderPath.text()
+            f = open('config.ini', 'w')
+            self.config.write(f)
+            f.close()
+
+    def getImageSaveFolder(self):
+        file = QtWidgets.QFileDialog.getExistingDirectory()
+        if len(file) != 0:
+            self.gui.imageSaveFolderPath.setText(file)
+            self.config['general']['image_save_folder'] = self.gui.imageSaveFolderPath.text()
+            f = open('config.ini', 'w')
+            self.config.write(f)
+            f.close()
+
+    def getHeliconFocusCommandPath(self):
+        file, check = QtWidgets.QFileDialog.getOpenFileUrl()
+        if check:
+            self.gui.heliconfocusCommandPath.setText(file.url())
+            self.config['heliconfocus']['heliconfocus_command_path'] = self.gui.heliconfocusCommandPath.text()
+            f = open('config.ini', 'w')
+            self.config.write(f)
+            f.close()
+
     def start(self):
         raw_actions = self.gui.actionsText.toPlainText()
 
