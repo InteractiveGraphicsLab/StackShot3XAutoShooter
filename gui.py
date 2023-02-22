@@ -37,8 +37,6 @@ class GUI(QtWidgets.QMainWindow):
 
         self.gui.startButton.clicked.connect(self.start)
 
-        self.gui.tabWidget.currentChanged.connect(self.updateConfig)
-
         self.gui.imageSrcFolderReferenceButton.clicked.connect(self.updateImageSrcFolder)
         self.gui.imageSaveFolderReferenceButton.clicked.connect(self.updateImageSaveFolder)
 
@@ -72,29 +70,6 @@ class GUI(QtWidgets.QMainWindow):
             self.gui.imageSaveFolderPath.setText(self.config['general']['image_save_folder'])
         else:
             self.gui.imageSaveFolderPath.setText('Not selected.')
-
-        if not 'helicon_focus' in self.config:
-            self.config['heliconfocus'] = {}
-
-        # heliconfocus/heliconfocus_command_path
-        if 'heliconfocus_command_path' in self.config['heliconfocus'] and 0 < len(self.config['heliconfocus']['heliconfocus_command_path']):
-            self.gui.heliconfocusCommandPath.setText(self.config['heliconfocus']['heliconfocus_command_path'])
-        else:
-            self.gui.heliconfocusCommandPath.setText('Not selected.')
-
-    def updateConfig(self):
-        if self.gui.tabWidget.currentIndex() == 1:
-            return
-
-        if self.gui.heliconfocusCommandPath.text() != 'Not selected.':
-            self.config['heliconfocus']['heliconfocus_command_path'] = self.gui.heliconfocusCommandPath.text()
-
-        if self.gui.heliconfocusCommandPath.text() != 'Not selected.':
-            self.config['metashape']['metashape_command_path'] = self.gui.metashapeCommandPath.text()
-
-        f = open('config.ini', 'w')
-        self.config.write(f)
-        f.close()
 
     def updateImageSrcFolder(self):
         file = QtWidgets.QFileDialog.getExistingDirectory()
@@ -136,15 +111,13 @@ class GUI(QtWidgets.QMainWindow):
             return
 
         shutter_count = 0
-        tmp_dir = self.gui.imageTmpPath.text() # tmp dir
-        save_basedir = self.gui.imageSavePath.text() # save path
+        tmp_dir = self.gui.imageSrcFolderPath.text() # src folder
+        save_basedir = self.gui.imageSaveFolderPath.text() # save folder
         brackets = self.gui.brackets.value() # num of brackets
-        focus_stacking_cmd_path = self.gui.heliconFocusCommandPath.text() # focus stacking command path
         # debbug output
         print("tmp dir:", tmp_dir)
         print("save basedir", save_basedir)
         print("brackets:", brackets)
-        print("focus stacking cmd path:", focus_stacking_cmd_path)
         try:
             for action in action_queue:
                 if action[0] == 'move':
@@ -182,7 +155,7 @@ class GUI(QtWidgets.QMainWindow):
             try:
                 for original_dir in original_images_dirs:
                     print(original_dir)
-                    subprocess.run([focus_stacking_cmd_path, \
+                    subprocess.run([self.config['general']['heliconfocus_command_path'], \
                                     '-silent', \
                                     os.path.join(save_basedir, 'original', original_dir), \
                                     '-save:' + os.path.join(save_basedir, 'stacking', original_dir + '.jpg'), \
@@ -195,5 +168,5 @@ class GUI(QtWidgets.QMainWindow):
             # metashape
             env = os.environ
             env['IMAGE_PATH'] = os.path.join(save_basedir, 'stacking')
-            env['METASHAPE_PROJECT_PATH'] = self.gui.metashapeProjectPath.text()
-            subprocess.run([self.gui.metashapeCommandPath.text(), '-r', 'metashape_script.py'], env=env)
+            env['METASHAPE_PROJECT_PATH'] = self.gui.metashapeProjectFolderPath.text()
+            subprocess.run([self.config['general']['metashape_command_path'], '-r', 'metashape_script.py'], env=env)
