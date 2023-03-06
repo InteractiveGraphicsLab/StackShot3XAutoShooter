@@ -14,7 +14,6 @@ def float2uint(data: float):
     casted_data = casted_data_ptr.contents.value
     return casted_data
 
-
 class StackShotController:
     def __init__(self):
         self.device = Ftdi()
@@ -58,15 +57,19 @@ class StackShotController:
         """
         # res_cmd = res[1] << 8 | res[2]
 
-        res_response = res[3]
-        if res_response == int(Action.COMM_ACTION_RSP_OK):
-            print('STATUS_SUCCESS')
-        elif res_response == int(Action.COMM_ACTION_BAD_PARAM):
-            print('STATUS_BAD_PARAM')
-        elif res_response == int(Action.COMM_ACTION_BUSY):
-            print('STATUS_BUSY')
-        else:
-            print('response:', res_response.to_bytes(1, 'big'))
+        # res[3]: axis & response
+        # axis - X: 0000 0000, Y: 0001 0000, Z: 0010 0000
+        # exp: RSP_OK(0010) on axis -> 0001 0010
+        res_response = res[3] & 0x0F
+        if res_response != int(Action.COMM_ACTION_RSP_OK):
+        #     print('STATUS_SUCCESS')
+        # elif res_response == int(Action.COMM_ACTION_BAD_PARAM):
+        #     print('STATUS_BAD_PARAM')
+        # elif res_response == int(Action.COMM_ACTION_BUSY):
+        #     print('STATUS_BUSY')
+        # else:
+            # print('response:', res_response.to_bytes(1, 'big'))
+            print('bad response')
 
         res_buffsize = res[4]
 
@@ -98,13 +101,7 @@ class StackShotController:
         self.device.set_baudrate(STACKSHOT_BAUD_RATE)
         self.device.set_flowctrl('') # no flow controll
 
-        self.stop(RailAxis.COMM_RAIL_AXIS_X)
-        self.stop(RailAxis.COMM_RAIL_AXIS_Y)
-        self.stop(RailAxis.COMM_RAIL_AXIS_Z)
-
-
     def close(self):
-        print('\n=== Close ===')
         self.device.set_bitmode(0xF0, Ftdi.BitMode.CBUS)
         self.send_command(RailAxis.COMM_RAIL_AXIS_ANY, Cmd.CC_CLOSE, Action.COMM_ACTION_WRITE, None, 0)
         self.device.close()
@@ -116,8 +113,6 @@ class StackShotController:
         return status
 
     def move(self, axis: RailAxis, dir: RailDir, dist: float):
-        print('\n=== Move ===')
-
         castedDist = float2uint(dist)
 
         data = bytearray()
@@ -137,9 +132,7 @@ class StackShotController:
                 break
             time.sleep(0.5)
 
-
     def stop(self, axis: RailAxis):
-        print('=== STOP ===')
         self.send_command(axis, Cmd.CC_RAIL_STOP, Action.COMM_ACTION_WRITE, None, 0)
 
     def shutter(self,  num_pulses: int, pulse_duration: float, pulse_off_time: float):
