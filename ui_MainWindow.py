@@ -16,16 +16,16 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QGridLayout,
-    QHBoxLayout, QLabel, QMainWindow, QPlainTextEdit,
-    QPushButton, QSizePolicy, QSpacerItem, QSpinBox,
-    QStatusBar, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QHBoxLayout,
+    QLabel, QMainWindow, QPlainTextEdit, QPushButton,
+    QSizePolicy, QSpacerItem, QSpinBox, QStatusBar,
+    QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(672, 502)
+        MainWindow.resize(672, 540)
         font = QFont()
         font.setPointSize(10)
         MainWindow.setFont(font)
@@ -33,41 +33,66 @@ class Ui_MainWindow(object):
         self.actionPreferences.setObjectName(u"actionPreferences")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.gridLayout = QGridLayout(self.centralwidget)
-        self.gridLayout.setObjectName(u"gridLayout")
+        self.horizontalLayout_7 = QHBoxLayout(self.centralwidget)
+        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
         self.verticalLayout_7 = QVBoxLayout()
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
-        self.horizontalLayout_5 = QHBoxLayout()
-        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+        self.horizontalLayout_6 = QHBoxLayout()
+        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.actionsLabel = QLabel(self.centralwidget)
-        self.actionsLabel.setObjectName(u"actionsLabel")
+        self.actionsPanelLabel = QLabel(self.centralwidget)
+        self.actionsPanelLabel.setObjectName(u"actionsPanelLabel")
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.actionsLabel.sizePolicy().hasHeightForWidth())
-        self.actionsLabel.setSizePolicy(sizePolicy)
-        font1 = QFont()
-        font1.setPointSize(11)
-        self.actionsLabel.setFont(font1)
+        sizePolicy.setHeightForWidth(self.actionsPanelLabel.sizePolicy().hasHeightForWidth())
+        self.actionsPanelLabel.setSizePolicy(sizePolicy)
+        self.actionsPanelLabel.setFont(font)
 
-        self.verticalLayout.addWidget(self.actionsLabel)
+        self.verticalLayout.addWidget(self.actionsPanelLabel)
 
-        self.actionsText = QPlainTextEdit(self.centralwidget)
-        self.actionsText.setObjectName(u"actionsText")
+        self.actionsPanel = QPlainTextEdit(self.centralwidget)
+        self.actionsPanel.setObjectName(u"actionsPanel")
         sizePolicy1 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.actionsText.sizePolicy().hasHeightForWidth())
-        self.actionsText.setSizePolicy(sizePolicy1)
-        self.actionsText.setMinimumSize(QSize(300, 400))
-        self.actionsText.setMaximumSize(QSize(300, 16777215))
+        sizePolicy1.setHeightForWidth(self.actionsPanel.sizePolicy().hasHeightForWidth())
+        self.actionsPanel.setSizePolicy(sizePolicy1)
+        self.actionsPanel.setMinimumSize(QSize(300, 400))
+        self.actionsPanel.setMaximumSize(QSize(300, 16777215))
 
-        self.verticalLayout.addWidget(self.actionsText)
+        self.verticalLayout.addWidget(self.actionsPanel)
+
+        self.horizontalLayout_5 = QHBoxLayout()
+        self.horizontalLayout_5.setSpacing(0)
+        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+        self.horizontalSpacer_2 = QSpacerItem(135, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
+
+        self.horizontalLayout_5.addItem(self.horizontalSpacer_2)
+
+        self.saveActionButton = QPushButton(self.centralwidget)
+        self.saveActionButton.setObjectName(u"saveActionButton")
+        self.saveActionButton.setMaximumSize(QSize(80, 16777215))
+        self.saveActionButton.setFont(font)
+
+        self.horizontalLayout_5.addWidget(self.saveActionButton)
+
+        self.horizontalSpacer_3 = QSpacerItem(6, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
+
+        self.horizontalLayout_5.addItem(self.horizontalSpacer_3)
+
+        self.loadActionButton = QPushButton(self.centralwidget)
+        self.loadActionButton.setObjectName(u"loadActionButton")
+        self.loadActionButton.setMaximumSize(QSize(80, 16777215))
+
+        self.horizontalLayout_5.addWidget(self.loadActionButton)
 
 
-        self.horizontalLayout_5.addLayout(self.verticalLayout)
+        self.verticalLayout.addLayout(self.horizontalLayout_5)
+
+
+        self.horizontalLayout_6.addLayout(self.verticalLayout)
 
         self.verticalLayout_6 = QVBoxLayout()
         self.verticalLayout_6.setObjectName(u"verticalLayout_6")
@@ -204,7 +229,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.bracketsLabel = QLabel(self.centralwidget)
         self.bracketsLabel.setObjectName(u"bracketsLabel")
-        self.bracketsLabel.setFont(font1)
+        self.bracketsLabel.setFont(font)
 
         self.verticalLayout_5.addWidget(self.bracketsLabel)
 
@@ -234,12 +259,13 @@ class Ui_MainWindow(object):
         self.verticalLayout_6.addItem(self.verticalSpacer)
 
 
-        self.horizontalLayout_5.addLayout(self.verticalLayout_6)
+        self.horizontalLayout_6.addLayout(self.verticalLayout_6)
 
 
-        self.verticalLayout_7.addLayout(self.horizontalLayout_5)
+        self.verticalLayout_7.addLayout(self.horizontalLayout_6)
 
         self.horizontalLayout_4 = QHBoxLayout()
+        self.horizontalLayout_4.setSpacing(0)
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
@@ -252,6 +278,10 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_4.addWidget(self.startButton)
 
+        self.horizontalSpacer_4 = QSpacerItem(6, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
+
+        self.horizontalLayout_4.addItem(self.horizontalSpacer_4)
+
         self.stopButton = QPushButton(self.centralwidget)
         self.stopButton.setObjectName(u"stopButton")
         self.stopButton.setMinimumSize(QSize(80, 0))
@@ -263,7 +293,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_7.addLayout(self.horizontalLayout_4)
 
 
-        self.gridLayout.addLayout(self.verticalLayout_7, 0, 0, 1, 1)
+        self.horizontalLayout_7.addLayout(self.verticalLayout_7)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QStatusBar(MainWindow)
@@ -283,8 +313,10 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.actionPreferences.setText(QCoreApplication.translate("MainWindow", u"Preferences", None))
-        self.actionsLabel.setText(QCoreApplication.translate("MainWindow", u"Actions Panel", None))
-        self.actionsText.setPlainText("")
+        self.actionsPanelLabel.setText(QCoreApplication.translate("MainWindow", u"Actions Panel", None))
+        self.actionsPanel.setPlainText("")
+        self.saveActionButton.setText(QCoreApplication.translate("MainWindow", u"save", None))
+        self.loadActionButton.setText(QCoreApplication.translate("MainWindow", u"load", None))
         self.imageSrcFolderLabel.setText(QCoreApplication.translate("MainWindow", u"Image src folder", None))
         self.imageSrcFolderReferenceButton.setText(QCoreApplication.translate("MainWindow", u"Reference", None))
         self.imageSrcFolderPath.setText(QCoreApplication.translate("MainWindow", u"Not Selected.", None))
