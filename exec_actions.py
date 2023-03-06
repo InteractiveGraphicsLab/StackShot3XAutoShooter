@@ -11,18 +11,22 @@ def exec_actions(stop_flag, raw_actions, controller, brackets, doFocusStacking, 
     # validation
     try:
         action_queue = action_parser(raw_actions)
-        print(action_queue)
     except Exception as e:
             print(e)
             return
 
     shutter_count = 0
-    tmp_dir = config['general']['image_src_folder'] # src folder
-    save_basedir = config['general']['image_save_folder'] # save folder
+    image_src_folder = config['general']['image_src_folder'] # src folder
+    image_save_folder = config['general']['image_save_folder'] # save folder
+
     # debbug output
-    print("tmp dir:", tmp_dir)
-    print("save basedir", save_basedir)
-    print("brackets:", brackets)
+    print("image src folder:", image_src_folder)
+    print("image save folder:", image_save_folder)
+    if doFocusStacking:
+        print("brackets:", brackets)
+    if doMetashape:
+        print("metashape project folder:", config['general']['metashape_project_folder'])
+
     try:
         controller.stop(RailAxis.COMM_RAIL_AXIS_X)
         controller.stop(RailAxis.COMM_RAIL_AXIS_Y)
@@ -43,11 +47,11 @@ def exec_actions(stop_flag, raw_actions, controller, brackets, doFocusStacking, 
             elif action[0] == 'shutter':
                 controller.shutter(1, 1., 2.) # NOTE
 
-                image_paths = [os.path.join(tmp_dir, f) for f in os.listdir(tmp_dir)] # NOTE need ext check
+                image_paths = [os.path.join(image_src_folder, f) for f in os.listdir(image_src_folder)] # NOTE need ext check
                 image_paths.sort(key=os.path.getmtime, reverse=True) # desc images timestamp
                 save_image_paths = image_paths[:brackets]
 
-                save_dir = os.path.join(save_basedir, 'original', str(shutter_count).zfill(4)) # image save dir
+                save_dir = os.path.join(image_save_folder, 'original', str(shutter_count).zfill(4)) # image save dir
                 os.makedirs(save_dir) # create image save dir
                 for image_path in save_image_paths:
                     image_name = os.path.basename(image_path)
@@ -59,8 +63,8 @@ def exec_actions(stop_flag, raw_actions, controller, brackets, doFocusStacking, 
 
     if doFocusStacking == True:
         # focus stacking
-        original_images_dirs = os.listdir(os.path.join(save_basedir, 'original'))
-        os.makedirs(os.path.join(save_basedir, 'stacking')) # create stacking images dir
+        original_images_dirs = os.listdir(os.path.join(image_save_folder, 'original'))
+        os.makedirs(os.path.join(image_save_folder, 'stacking')) # create stacking images dir
         try:
             for original_dir in original_images_dirs:
                 with stop_flag.get_lock():
@@ -68,8 +72,8 @@ def exec_actions(stop_flag, raw_actions, controller, brackets, doFocusStacking, 
                         return
                 subprocess.run([config['general']['heliconfocus_command_path'], \
                                 '-silent', \
-                                os.path.join(save_basedir, 'original', original_dir), \
-                                '-save:' + os.path.join(save_basedir, 'stacking', original_dir + '.jpg'), \
+                                os.path.join(image_save_folder, 'original', original_dir), \
+                                '-save:' + os.path.join(image_save_folder, 'stacking', original_dir + '.jpg'), \
                                 '-mp:2', \
                                 '-j:100'], check=True)
         except Exception as excpt :
@@ -78,6 +82,6 @@ def exec_actions(stop_flag, raw_actions, controller, brackets, doFocusStacking, 
     if doMetashape == True:
         # metashape
         env = os.environ
-        env['IMAGE_PATH'] = os.path.join(save_basedir, 'stacking')
+        env['IMAGE_PATH'] = os.path.join(image_save_folder, 'stacking')
         env['METASHAPE_PROJECT_PATH'] = config['general']['metashape_project_folder']
         subprocess.run([config['general']['metashape_command_path'], '--gui', '-r', 'metashape_script.py'], env=env)
