@@ -42,6 +42,9 @@ class GUI(QtWidgets.QMainWindow):
         self.gui.startButton.clicked.connect(self.start)
         self.gui.stopButton.clicked.connect(self.stop)
 
+        self.gui.saveActionButton.clicked.connect(self.saveAction)
+        self.gui.loadActionButton.clicked.connect(self.loadAction)
+
         self.gui.imageSrcFolderReferenceButton.clicked.connect(self.updateImageSrcFolder)
         self.gui.imageSaveFolderReferenceButton.clicked.connect(self.updateImageSaveFolder)
         self.gui.metashapeProjectFolderPathReferenceButton.clicked.connect(self.updateMetashapeProjectFolder)
@@ -54,7 +57,7 @@ class GUI(QtWidgets.QMainWindow):
 
         self.controller = StackShotController()
         try:
-            print('Connect Stackshot3X')
+            print('connecting to Stackshot3X...')
             self.controller.open()
         except Exception as excpt:
             print(excpt)
@@ -122,11 +125,26 @@ class GUI(QtWidgets.QMainWindow):
             self.config.write(f)
             f.close()
 
+    def loadAction(self):
+        fname = QtWidgets.QFileDialog.getOpenFileName(self, 'Select File', '.', "Text file (*.txt)")
+        if fname[0]:
+            f = open(fname[0], 'r')
+            actions = f.read()
+            f.close()
+            self.gui.actionsPanel.setPlainText(actions)
+
+    def saveAction(self):
+        fname = QtWidgets.QFileDialog.getSaveFileName(self, 'Save As', '.', "Text file (*.txt)")
+        if fname[0]:
+            f = open(fname[0], 'w')
+            f.write(self.gui.actionsPanel.toPlainText())
+            f.close()
+
     def start(self):
         print('start')
         with self.stop_flag.get_lock():
             self.stop_flag.value = 0 # false
-        self.working_thread = Thread(target=exec_actions, args=(self.stop_flag, self.gui.actionsText.toPlainText(), self.controller, self.gui.brackets.value(), self.gui.doFocusStacking.isChecked(), self.gui.doMetashape.isChecked(), self.config), daemon=True)
+        self.working_thread = Thread(target=exec_actions, args=(self.stop_flag, self.gui.actionsPanel.toPlainText(), self.controller, self.gui.brackets.value(), self.gui.doFocusStacking.isChecked(), self.gui.doMetashape.isChecked(), self.config), daemon=True)
         self.working_thread.start()
 
     def stop(self):
@@ -142,6 +160,7 @@ class GUI(QtWidgets.QMainWindow):
                 self.stop_flag.value = 1 # true
             self.working_thread.join()
         try:
+            print('discoonnecting from Stackshot3X...')
             self.controller.stop(RailAxis.COMM_RAIL_AXIS_X)
             self.controller.stop(RailAxis.COMM_RAIL_AXIS_Y)
             self.controller.stop(RailAxis.COMM_RAIL_AXIS_Z)
