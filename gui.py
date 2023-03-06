@@ -55,6 +55,7 @@ class GUI(QtWidgets.QMainWindow):
         self.working_thread = None
         self.stop_flag = Value('i', 0) # 0: false, 1: true
 
+        # when start app, connect with StackShot3X
         self.controller = StackShotController()
         try:
             print('connecting to Stackshot3X...')
@@ -63,7 +64,7 @@ class GUI(QtWidgets.QMainWindow):
             print(excpt)
             exit()
 
-
+    # load config from config.ini
     def loadConfig(self):
         self.config.read('config.ini')
         if not 'general' in self.config:
@@ -98,6 +99,7 @@ class GUI(QtWidgets.QMainWindow):
         else:
             self.gui.metashapeProjectFolderPath.setText('Not selected.')
 
+    # select "Image Src Folder" PATH from file dialog and save to config
     def updateImageSrcFolder(self):
         file = QtWidgets.QFileDialog.getExistingDirectory()
         if len(file) != 0:
@@ -107,6 +109,7 @@ class GUI(QtWidgets.QMainWindow):
             self.config.write(f)
             f.close()
 
+    # select "Image Save Folder" PATH from file dialog and save to config
     def updateImageSaveFolder(self):
         file = QtWidgets.QFileDialog.getExistingDirectory()
         if len(file) != 0:
@@ -116,6 +119,7 @@ class GUI(QtWidgets.QMainWindow):
             self.config.write(f)
             f.close()
 
+    # select "Metashpae Project Folder" PATH from file dialog and save to config
     def updateMetashapeProjectFolder(self):
         file = QtWidgets.QFileDialog.getExistingDirectory()
         if len(file) != 0:
@@ -125,6 +129,7 @@ class GUI(QtWidgets.QMainWindow):
             self.config.write(f)
             f.close()
 
+    # load action and display on "Actions Panel"
     def loadAction(self):
         fname = QtWidgets.QFileDialog.getOpenFileName(self, 'Select File', '.', "Text file (*.txt)")
         if fname[0]:
@@ -133,6 +138,7 @@ class GUI(QtWidgets.QMainWindow):
             f.close()
             self.gui.actionsPanel.setPlainText(actions)
 
+    # save action written in "Actions Panel"
     def saveAction(self):
         fname = QtWidgets.QFileDialog.getSaveFileName(self, 'Save As', '.', "Text file (*.txt)")
         if fname[0]:
@@ -140,25 +146,36 @@ class GUI(QtWidgets.QMainWindow):
             f.write(self.gui.actionsPanel.toPlainText())
             f.close()
 
+    # start action
     def start(self):
         print('start')
+
+        # set stop_flag to 0(false)
         with self.stop_flag.get_lock():
             self.stop_flag.value = 0 # false
+
+        # create and thread to execute actions
         self.working_thread = Thread(target=exec_actions, args=(self.stop_flag, self.gui.actionsPanel.toPlainText(), self.controller, self.gui.brackets.value(), self.gui.doFocusStacking.isChecked(), self.gui.doMetashape.isChecked(), self.config), daemon=True)
         self.working_thread.start()
 
+    # stop in progress action
     def stop(self):
         if self.working_thread != None and self.working_thread.is_alive():
             print('stop')
+
+            # set stop_flag to 1(true)
             with self.stop_flag.get_lock():
                 self.stop_flag.value = 1 # true
 
+    # when close window, this function is fired
     def closeEvent(self, event: QtGui.QCloseEvent):
         if self.working_thread != None and self.working_thread.is_alive():
             print('stop')
             with self.stop_flag.get_lock():
                 self.stop_flag.value = 1 # true
             self.working_thread.join()
+
+        # after stop all axis, disconnect from StackShot3X
         try:
             print('discoonnecting from Stackshot3X...')
             self.controller.stop(RailAxis.COMM_RAIL_AXIS_X)
