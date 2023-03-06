@@ -71,10 +71,12 @@ def exec_actions(stop_flag, raw_actions, controller, brackets, doFocusStacking, 
         original_images_dirs = os.listdir(os.path.join(image_save_folder, 'original'))
         os.makedirs(os.path.join(image_save_folder, 'stacking')) # create stacking images dir
         try:
+            # focus stacking on each view
             for original_dir in original_images_dirs:
                 with stop_flag.get_lock():
                     if stop_flag.value == 1: # true
                         return
+                # run heliconfocus 
                 subprocess.run([config['general']['heliconfocus_command_path'], \
                                 '-silent', \
                                 os.path.join(image_save_folder, 'original', original_dir), \
@@ -90,5 +92,5 @@ def exec_actions(stop_flag, raw_actions, controller, brackets, doFocusStacking, 
         env['IMAGE_PATH'] = os.path.join(image_save_folder, 'stacking')
         env['METASHAPE_PROJECT_PATH'] = config['general']['metashape_project_folder']
 
-        # execute metashape
+        # run metashape
         subprocess.run([config['general']['metashape_command_path'], '--gui', '-r', 'metashape_script.py'], env=env)
