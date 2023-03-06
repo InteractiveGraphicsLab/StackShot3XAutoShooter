@@ -1,3 +1,5 @@
+# referenced from https://www.cognisys-inc.com/downloads/stackshot/StackShotCommands_1_2.pdf
+
 from enum import IntEnum, auto
 
 STACKSHOT_BAUD_RATE = 38400
