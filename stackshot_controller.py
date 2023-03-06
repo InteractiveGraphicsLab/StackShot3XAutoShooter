@@ -1,3 +1,5 @@
+# referenced from https://www.cognisys-inc.com/downloads/stackshot/StackShotCommands_1_2.pdf
+
 import time
 import ctypes
 import usb.core
@@ -62,13 +64,6 @@ class StackShotController:
         # exp: RSP_OK(0010) on axis -> 0001 0010
         res_response = res[3] & 0x0F
         if res_response != int(Action.COMM_ACTION_RSP_OK):
-        #     print('STATUS_SUCCESS')
-        # elif res_response == int(Action.COMM_ACTION_BAD_PARAM):
-        #     print('STATUS_BAD_PARAM')
-        # elif res_response == int(Action.COMM_ACTION_BUSY):
-        #     print('STATUS_BUSY')
-        # else:
-            # print('response:', res_response.to_bytes(1, 'big'))
             print('bad response')
 
         res_buffsize = res[4]
