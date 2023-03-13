@@ -1,3 +1,5 @@
+# referenced from https://www.agisoft.com/pdf/metashape_python_api_2_0_0.pdf
+
 import os
 import Metashape
 
