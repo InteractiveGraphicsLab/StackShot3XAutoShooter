@@ -53,20 +53,17 @@ def exec_actions(stop_flag, raw_actions: str, controller: StackShotController, b
                 controller.move(axis, RailDir.FWD, float(action[2]))
 
                 # wait for rail stop
-                while(True):
-                    if controller.get_status(axis) != RailStatus.MOVING:
-                        break
-                    time.sleep(0.5)
+                while controller.get_status(axis) != RailStatus.IDLE:
+                    time.sleep(0.2)
 
 
             # shoot camera
             elif action[0] == 'shutter':
                 controller.shutter(1, 1., 2.) # NOTE
+
                 # wait for finish shutter
-                while(True):
-                    if controller.get_status(RailAxis.ANY) != RailStatus.SHUTTER:
-                        break
-                    time.sleep(0.5)
+                while controller.get_status(RailAxis.ANY) != RailStatus.IDLE:
+                    time.sleep(0.2)
 
                 image_paths = [os.path.join(image_src_folder, f) for f in os.listdir(image_src_folder)]
                 image_paths.sort(key=os.path.getmtime, reverse=True) # desc images timestamp
