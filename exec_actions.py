@@ -1,10 +1,11 @@
 import os
+import time
 import signal
 import subprocess
 
-from commdefs import *
+from StackShot3X_API_for_Python.commdefs import *
 from action_parser import action_parser
-from stackshot_controller import StackShotController
+from StackShot3X_API_for_Python.stackshot_controller import StackShotController
 
 def exec_actions(stop_flag, raw_actions, controller, brackets, doFocusStacking, doMetashape, config):
     # validation and parse actions
@@ -41,16 +42,31 @@ def exec_actions(stop_flag, raw_actions, controller, brackets, doFocusStacking, 
 
             # move axis
             if action[0] == 'move':
+                axis = None
                 if action[1] == 'x':
-                    controller.move(RailAxis.COMM_RAIL_AXIS_X, RailDir.COMM_RAIL_DIR_FWD, float(action[2]))
+                    axis = RailAxis.COMM_RAIL_AXIS_X
                 elif action[1] == 'y':
-                    controller.move(RailAxis.COMM_RAIL_AXIS_Y, RailDir.COMM_RAIL_DIR_FWD, float(action[2]))
+                    axis = RailAxis.COMM_RAIL_AXIS_Y
                 elif action[1] == 'z':
-                    controller.move(RailAxis.COMM_RAIL_AXIS_Z, RailDir.COMM_RAIL_DIR_FWD, float(action[2]))
+                    axis = RailAxis.COMM_RAIL_AXIS_Z
+
+                controller.move(axis, RailDir.COMM_RAIL_DIR_FWD, float(action[2]))
+
+                # wait for rail stop
+                while(True):
+                    if controller.rail_status(axis) != RAIL_STATUS_MOVING:
+                        break
+                    time.sleep(0.5)
+
 
             # shoot camera
             elif action[0] == 'shutter':
                 controller.shutter(1, 1., 2.) # NOTE
+                # wait for finish shutter
+                while(True):
+                    if controller.rail_status(RailAxis.COMM_RAIL_AXIS_ANY) != RAIL_STATUS_SHUTTER:
+                        break
+                    time.sleep(0.5)
 
                 image_paths = [os.path.join(image_src_folder, f) for f in os.listdir(image_src_folder)] # NOTE need ext chec
                 image_paths.sort(key=os.path.getmtime, reverse=True) # desc images timestamp

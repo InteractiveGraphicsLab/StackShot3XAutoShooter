@@ -14,8 +14,8 @@ import configparser
 from PySide6 import QtGui
 from threading import Thread
 from multiprocessing import Value 
-from commdefs import *
-from stackshot_controller import StackShotController
+from StackShot3X_API_for_Python.commdefs import *
+from StackShot3X_API_for_Python.stackshot_controller import StackShotController
 from action_parser import action_parser
 from exec_actions import exec_actions
 
@@ -33,14 +33,29 @@ def isValidBrackets(s, min, max):
         return False
 
 
+def moveAxis(controller, axis, dir, dist):
+    try:
+        controller.move(axis, dir, dist)
+    except:
+        # pass
+        print('move')
+
+def stopAxis(controller, axis):
+    try:
+        controller.stop(axis)
+    except:
+        # pass
+        print('stop')
+
+
 class GUI(QtWidgets.QMainWindow):
     def __init__(self):
         super(GUI, self).__init__()
         self.gui = Ui_MainWindow()
         self.gui.setupUi(self)
 
-        self.gui.startButton.clicked.connect(self.start)
-        self.gui.stopButton.clicked.connect(self.stop)
+        self.gui.startButton.clicked.connect(self.startAction)
+        self.gui.stopButton.clicked.connect(self.stopAction)
 
         self.gui.saveActionButton.clicked.connect(self.saveAction)
         self.gui.loadActionButton.clicked.connect(self.loadAction)
@@ -48,6 +63,9 @@ class GUI(QtWidgets.QMainWindow):
         self.gui.imageSrcFolderReferenceButton.clicked.connect(self.updateImageSrcFolder)
         self.gui.imageSaveFolderReferenceButton.clicked.connect(self.updateImageSaveFolder)
         self.gui.metashapeProjectFolderPathReferenceButton.clicked.connect(self.updateMetashapeProjectFolder)
+
+        self.gui.fwdShortPushButton.pressed.connect(lambda: self.moveStackShot(RailDir.COMM_RAIL_DIR_FWD))
+        self.gui.backPushButton.pressed.connect(lambda dir=RailDir.COMM_RAIL_DIR_BACK: self.moveStackShot(dir))
 
         self.config = configparser.ConfigParser()
         self.loadConfig()
@@ -146,8 +164,20 @@ class GUI(QtWidgets.QMainWindow):
             f.write(self.gui.actionsPanel.toPlainText())
             f.close()
 
+    def moveStackShot(self, dir: RailDir, dist: float):
+        axis = None
+        if self.gui.xRadioButton.isChecked() == True:
+            axis = RailAxis.COMM_RAIL_AXIS_X
+        elif self.gui.yRadioButton.isChecked() == True:
+            axis = RailAxis.COMM_RAIL_AXIS_Y
+        elif self.gui.zRadioButton.isChecked() == True:
+            axis = RailAxis.COMM_RAIL_AXIS_Z
+
+        self.working_thread = Thread(target=moveAxis, args=(self.controller, axis, dir, dist,), daemon=True)
+        self.working_thread.start()
+
     # start action
-    def start(self):
+    def startAction(self):
         print('start')
 
         # set stop_flag to 0(false)
@@ -159,7 +189,7 @@ class GUI(QtWidgets.QMainWindow):
         self.working_thread.start()
 
     # stop in progress action
-    def stop(self):
+    def stopAction(self):
         if self.working_thread != None and self.working_thread.is_alive():
             print('stop')
 

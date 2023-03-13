@@ -1,0 +1,3 @@
+[submodule "StackShot3X_API_for_Python"]
+	path = StackShot3X_API_for_Python
+	url = https://github.com/InteractiveGraphicsLab/StackShot3X_API_for_Python
