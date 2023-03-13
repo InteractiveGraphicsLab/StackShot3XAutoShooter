@@ -29,9 +29,9 @@ def exec_actions(stop_flag, raw_actions, controller, brackets, doFocusStacking, 
 
     try:
         # send stop command in advance to prevent infinite move, 
-        controller.stop(RailAxis.COMM_RAIL_AXIS_X)
-        controller.stop(RailAxis.COMM_RAIL_AXIS_Y)
-        controller.stop(RailAxis.COMM_RAIL_AXIS_Z)
+        controller.stop(RailAxis.X)
+        controller.stop(RailAxis.Y)
+        controller.stop(RailAxis.Z)
 
         # execute all actions
         for action in action_queue:
@@ -44,17 +44,17 @@ def exec_actions(stop_flag, raw_actions, controller, brackets, doFocusStacking, 
             if action[0] == 'move':
                 axis = None
                 if action[1] == 'x':
-                    axis = RailAxis.COMM_RAIL_AXIS_X
+                    axis = RailAxis.X
                 elif action[1] == 'y':
-                    axis = RailAxis.COMM_RAIL_AXIS_Y
+                    axis = RailAxis.Y
                 elif action[1] == 'z':
-                    axis = RailAxis.COMM_RAIL_AXIS_Z
+                    axis = RailAxis.Z
 
-                controller.move(axis, RailDir.COMM_RAIL_DIR_FWD, float(action[2]))
+                controller.move(axis, RailDir.FWD, float(action[2]))
 
                 # wait for rail stop
                 while(True):
-                    if controller.rail_status(axis) != RAIL_STATUS_MOVING:
+                    if controller.rail_status(axis) != RailStatus.MOVING:
                         break
                     time.sleep(0.5)
 
@@ -64,7 +64,7 @@ def exec_actions(stop_flag, raw_actions, controller, brackets, doFocusStacking, 
                 controller.shutter(1, 1., 2.) # NOTE
                 # wait for finish shutter
                 while(True):
-                    if controller.rail_status(RailAxis.COMM_RAIL_AXIS_ANY) != RAIL_STATUS_SHUTTER:
+                    if controller.rail_status(RailAxis.ANY) != RailStatus.SHUTTER:
                         break
                     time.sleep(0.5)
 

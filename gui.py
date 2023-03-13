@@ -64,8 +64,8 @@ class GUI(QtWidgets.QMainWindow):
         self.gui.imageSaveFolderReferenceButton.clicked.connect(self.updateImageSaveFolder)
         self.gui.metashapeProjectFolderPathReferenceButton.clicked.connect(self.updateMetashapeProjectFolder)
 
-        self.gui.fwdShortPushButton.pressed.connect(lambda: self.moveStackShot(RailDir.COMM_RAIL_DIR_FWD))
-        self.gui.backPushButton.pressed.connect(lambda dir=RailDir.COMM_RAIL_DIR_BACK: self.moveStackShot(dir))
+        self.gui.fwdShortPushButton.pressed.connect(lambda: self.moveStackShot(RailDir.FWD))
+        self.gui.backPushButton.pressed.connect(lambda dir=RailDir.BACK: self.moveStackShot(dir))
 
         self.config = configparser.ConfigParser()
         self.loadConfig()
@@ -167,11 +167,11 @@ class GUI(QtWidgets.QMainWindow):
     def moveStackShot(self, dir: RailDir, dist: float):
         axis = None
         if self.gui.xRadioButton.isChecked() == True:
-            axis = RailAxis.COMM_RAIL_AXIS_X
+            axis = RailAxis.X
         elif self.gui.yRadioButton.isChecked() == True:
-            axis = RailAxis.COMM_RAIL_AXIS_Y
+            axis = RailAxis.Y
         elif self.gui.zRadioButton.isChecked() == True:
-            axis = RailAxis.COMM_RAIL_AXIS_Z
+            axis = RailAxis.Z
 
         self.working_thread = Thread(target=moveAxis, args=(self.controller, axis, dir, dist,), daemon=True)
         self.working_thread.start()
@@ -208,9 +208,9 @@ class GUI(QtWidgets.QMainWindow):
         # after stop all axis, disconnect from StackShot3X
         try:
             print('discoonnecting from Stackshot3X...')
-            self.controller.stop(RailAxis.COMM_RAIL_AXIS_X)
-            self.controller.stop(RailAxis.COMM_RAIL_AXIS_Y)
-            self.controller.stop(RailAxis.COMM_RAIL_AXIS_Z)
+            self.controller.stop(RailAxis.X)
+            self.controller.stop(RailAxis.Y)
+            self.controller.stop(RailAxis.Z)
             self.controller.close()
         except Exception as excpt:
             print(excpt)
