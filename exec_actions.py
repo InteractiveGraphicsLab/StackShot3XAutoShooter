@@ -7,7 +7,7 @@ from StackShot3X_API_for_Python.commdefs import *
 from action_parser import action_parser
 from StackShot3X_API_for_Python.stackshot_controller import StackShotController
 
-def exec_actions(stop_flag, raw_actions, controller, brackets, doFocusStacking, doMetashape, config):
+def exec_actions(stop_flag, raw_actions: str, controller: StackShotController, brackets: int, doFocusStacking: bool, doMetashape: bool, config):
     # validation and parse actions
     try:
         action_queue = action_parser(raw_actions)
@@ -54,7 +54,7 @@ def exec_actions(stop_flag, raw_actions, controller, brackets, doFocusStacking, 
 
                 # wait for rail stop
                 while(True):
-                    if controller.rail_status(axis) != RailStatus.MOVING:
+                    if controller.get_status(axis) != RailStatus.MOVING:
                         break
                     time.sleep(0.5)
 
@@ -64,7 +64,7 @@ def exec_actions(stop_flag, raw_actions, controller, brackets, doFocusStacking, 
                 controller.shutter(1, 1., 2.) # NOTE
                 # wait for finish shutter
                 while(True):
-                    if controller.rail_status(RailAxis.ANY) != RailStatus.SHUTTER:
+                    if controller.get_status(RailAxis.ANY) != RailStatus.SHUTTER:
                         break
                     time.sleep(0.5)
 
