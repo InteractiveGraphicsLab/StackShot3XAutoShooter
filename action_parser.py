@@ -1,5 +1,3 @@
-from autoshooter_error import AutoShooterError
-
 def create_action_queue(action_list: list):
     queue = []
 
@@ -50,7 +48,7 @@ def action_parser(raw_action: str):
         elif action[0] == 'end' and len(action) == 1:
             action_list.append(action)
             if loop_count == 0: # 'end' before 'loop'
-                raise AutoShooterError('SyntaxError', line)
+                raise RuntimeError('SyntaxError', line)
             loop_count -= 1
         elif action[0] == 'move' and len(action) == 3 and \
           (action[1] == 'x' or action[1] == 'y' or action[1] == 'z') and \
@@ -59,9 +57,9 @@ def action_parser(raw_action: str):
         elif action[0] == 'shutter' and len(action) == 1:
             action_list.append(action)
         else:
-            raise AutoShooterError('SyntaxError', line)
+            raise RuntimeError('SyntaxError', line)
 
     if loop_count != 0:
-        raise AutoShooterError('SyntaxError', 'need \'end\'')
+        raise RuntimeError('SyntaxError', 'need \'end\'')
 
     return create_action_queue(action_list)
