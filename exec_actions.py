@@ -68,7 +68,7 @@ def exec_actions(stop_flag, raw_actions: str, controller: StackShotController, b
                         break
                     time.sleep(0.5)
 
-                image_paths = [os.path.join(image_src_folder, f) for f in os.listdir(image_src_folder)] # NOTE need ext chec
+                image_paths = [os.path.join(image_src_folder, f) for f in os.listdir(image_src_folder)]
                 image_paths.sort(key=os.path.getmtime, reverse=True) # desc images timestamp
                 save_image_paths = image_paths[:brackets]
 
