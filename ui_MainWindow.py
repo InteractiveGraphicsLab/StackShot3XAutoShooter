@@ -18,14 +18,14 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QTransform)
 from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QHBoxLayout,
     QLabel, QMainWindow, QPlainTextEdit, QPushButton,
-    QSizePolicy, QSpacerItem, QSpinBox, QStatusBar,
-    QVBoxLayout, QWidget)
+    QRadioButton, QSizePolicy, QSpacerItem, QSpinBox,
+    QStatusBar, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(672, 540)
+        MainWindow.resize(672, 546)
         font = QFont()
         font.setPointSize(10)
         MainWindow.setFont(font)
@@ -33,12 +33,12 @@ class Ui_MainWindow(object):
         self.actionPreferences.setObjectName(u"actionPreferences")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.horizontalLayout_7 = QHBoxLayout(self.centralwidget)
-        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
-        self.verticalLayout_7 = QVBoxLayout()
-        self.verticalLayout_7.setObjectName(u"verticalLayout_7")
-        self.horizontalLayout_6 = QHBoxLayout()
-        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
+        self.horizontalLayout_11 = QHBoxLayout(self.centralwidget)
+        self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
+        self.verticalLayout_8 = QVBoxLayout()
+        self.verticalLayout_8.setObjectName(u"verticalLayout_8")
+        self.horizontalLayout_10 = QHBoxLayout()
+        self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.actionsPanelLabel = QLabel(self.centralwidget)
@@ -48,7 +48,9 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.actionsPanelLabel.sizePolicy().hasHeightForWidth())
         self.actionsPanelLabel.setSizePolicy(sizePolicy)
-        self.actionsPanelLabel.setFont(font)
+        font1 = QFont()
+        font1.setPointSize(12)
+        self.actionsPanelLabel.setFont(font1)
 
         self.verticalLayout.addWidget(self.actionsPanelLabel)
 
@@ -61,6 +63,9 @@ class Ui_MainWindow(object):
         self.actionsPanel.setSizePolicy(sizePolicy1)
         self.actionsPanel.setMinimumSize(QSize(300, 400))
         self.actionsPanel.setMaximumSize(QSize(300, 16777215))
+        font2 = QFont()
+        font2.setPointSize(11)
+        self.actionsPanel.setFont(font2)
 
         self.verticalLayout.addWidget(self.actionsPanel)
 
@@ -74,7 +79,7 @@ class Ui_MainWindow(object):
         self.saveActionButton = QPushButton(self.centralwidget)
         self.saveActionButton.setObjectName(u"saveActionButton")
         self.saveActionButton.setMaximumSize(QSize(80, 16777215))
-        self.saveActionButton.setFont(font)
+        self.saveActionButton.setFont(font2)
 
         self.horizontalLayout_5.addWidget(self.saveActionButton)
 
@@ -85,6 +90,7 @@ class Ui_MainWindow(object):
         self.loadActionButton = QPushButton(self.centralwidget)
         self.loadActionButton.setObjectName(u"loadActionButton")
         self.loadActionButton.setMaximumSize(QSize(80, 16777215))
+        self.loadActionButton.setFont(font2)
 
         self.horizontalLayout_5.addWidget(self.loadActionButton)
 
@@ -92,10 +98,10 @@ class Ui_MainWindow(object):
         self.verticalLayout.addLayout(self.horizontalLayout_5)
 
 
-        self.horizontalLayout_6.addLayout(self.verticalLayout)
+        self.horizontalLayout_10.addLayout(self.verticalLayout)
 
-        self.verticalLayout_6 = QVBoxLayout()
-        self.verticalLayout_6.setObjectName(u"verticalLayout_6")
+        self.verticalLayout_7 = QVBoxLayout()
+        self.verticalLayout_7.setObjectName(u"verticalLayout_7")
         self.verticalLayout_2 = QVBoxLayout()
         self.verticalLayout_2.setSpacing(0)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
@@ -103,6 +109,7 @@ class Ui_MainWindow(object):
         self.imageSrcFolderLabel.setObjectName(u"imageSrcFolderLabel")
         self.imageSrcFolderLabel.setMinimumSize(QSize(200, 25))
         self.imageSrcFolderLabel.setMaximumSize(QSize(200, 25))
+        self.imageSrcFolderLabel.setFont(font1)
 
         self.verticalLayout_2.addWidget(self.imageSrcFolderLabel)
 
@@ -117,6 +124,7 @@ class Ui_MainWindow(object):
         self.imageSrcFolderReferenceButton.setSizePolicy(sizePolicy2)
         self.imageSrcFolderReferenceButton.setMinimumSize(QSize(80, 25))
         self.imageSrcFolderReferenceButton.setMaximumSize(QSize(80, 25))
+        self.imageSrcFolderReferenceButton.setFont(font2)
         self.imageSrcFolderReferenceButton.setIconSize(QSize(16, 16))
         self.imageSrcFolderReferenceButton.setAutoDefault(False)
         self.imageSrcFolderReferenceButton.setFlat(False)
@@ -132,6 +140,7 @@ class Ui_MainWindow(object):
         self.imageSrcFolderPath.setSizePolicy(sizePolicy3)
         self.imageSrcFolderPath.setMinimumSize(QSize(0, 25))
         self.imageSrcFolderPath.setMaximumSize(QSize(16777215, 25))
+        self.imageSrcFolderPath.setFont(font2)
         self.imageSrcFolderPath.setFrameShape(QFrame.StyledPanel)
         self.imageSrcFolderPath.setFrameShadow(QFrame.Plain)
         self.imageSrcFolderPath.setTextInteractionFlags(Qt.NoTextInteraction)
@@ -142,7 +151,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.addLayout(self.horizontalLayout)
 
 
-        self.verticalLayout_6.addLayout(self.verticalLayout_2)
+        self.verticalLayout_7.addLayout(self.verticalLayout_2)
 
         self.verticalLayout_3 = QVBoxLayout()
         self.verticalLayout_3.setSpacing(0)
@@ -151,6 +160,7 @@ class Ui_MainWindow(object):
         self.imageSaveFolderLabel.setObjectName(u"imageSaveFolderLabel")
         self.imageSaveFolderLabel.setMinimumSize(QSize(200, 25))
         self.imageSaveFolderLabel.setMaximumSize(QSize(200, 25))
+        self.imageSaveFolderLabel.setFont(font1)
 
         self.verticalLayout_3.addWidget(self.imageSaveFolderLabel)
 
@@ -162,6 +172,7 @@ class Ui_MainWindow(object):
         self.imageSaveFolderReferenceButton.setSizePolicy(sizePolicy2)
         self.imageSaveFolderReferenceButton.setMinimumSize(QSize(80, 25))
         self.imageSaveFolderReferenceButton.setMaximumSize(QSize(80, 25))
+        self.imageSaveFolderReferenceButton.setFont(font2)
         self.imageSaveFolderReferenceButton.setIconSize(QSize(16, 16))
         self.imageSaveFolderReferenceButton.setAutoDefault(False)
         self.imageSaveFolderReferenceButton.setFlat(False)
@@ -172,6 +183,7 @@ class Ui_MainWindow(object):
         self.imageSaveFolderPath.setObjectName(u"imageSaveFolderPath")
         self.imageSaveFolderPath.setMinimumSize(QSize(250, 25))
         self.imageSaveFolderPath.setMaximumSize(QSize(16777215, 25))
+        self.imageSaveFolderPath.setFont(font2)
         self.imageSaveFolderPath.setFrameShape(QFrame.StyledPanel)
         self.imageSaveFolderPath.setFrameShadow(QFrame.Plain)
         self.imageSaveFolderPath.setTextInteractionFlags(Qt.NoTextInteraction)
@@ -182,7 +194,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.addLayout(self.horizontalLayout_2)
 
 
-        self.verticalLayout_6.addLayout(self.verticalLayout_3)
+        self.verticalLayout_7.addLayout(self.verticalLayout_3)
 
         self.verticalLayout_4 = QVBoxLayout()
         self.verticalLayout_4.setSpacing(0)
@@ -191,6 +203,7 @@ class Ui_MainWindow(object):
         self.metashapeProjectFolderLabel.setObjectName(u"metashapeProjectFolderLabel")
         self.metashapeProjectFolderLabel.setMinimumSize(QSize(200, 25))
         self.metashapeProjectFolderLabel.setMaximumSize(QSize(105, 25))
+        self.metashapeProjectFolderLabel.setFont(font1)
 
         self.verticalLayout_4.addWidget(self.metashapeProjectFolderLabel)
 
@@ -202,6 +215,7 @@ class Ui_MainWindow(object):
         self.metashapeProjectFolderPathReferenceButton.setSizePolicy(sizePolicy2)
         self.metashapeProjectFolderPathReferenceButton.setMinimumSize(QSize(80, 25))
         self.metashapeProjectFolderPathReferenceButton.setMaximumSize(QSize(80, 25))
+        self.metashapeProjectFolderPathReferenceButton.setFont(font2)
         self.metashapeProjectFolderPathReferenceButton.setIconSize(QSize(16, 16))
         self.metashapeProjectFolderPathReferenceButton.setAutoDefault(False)
         self.metashapeProjectFolderPathReferenceButton.setFlat(False)
@@ -212,6 +226,7 @@ class Ui_MainWindow(object):
         self.metashapeProjectFolderPath.setObjectName(u"metashapeProjectFolderPath")
         self.metashapeProjectFolderPath.setMinimumSize(QSize(250, 25))
         self.metashapeProjectFolderPath.setMaximumSize(QSize(16777215, 25))
+        self.metashapeProjectFolderPath.setFont(font2)
         self.metashapeProjectFolderPath.setFrameShape(QFrame.StyledPanel)
         self.metashapeProjectFolderPath.setFrameShadow(QFrame.Plain)
         self.metashapeProjectFolderPath.setTextInteractionFlags(Qt.NoTextInteraction)
@@ -222,47 +237,154 @@ class Ui_MainWindow(object):
         self.verticalLayout_4.addLayout(self.horizontalLayout_3)
 
 
-        self.verticalLayout_6.addLayout(self.verticalLayout_4)
+        self.verticalLayout_7.addLayout(self.verticalLayout_4)
 
         self.verticalLayout_5 = QVBoxLayout()
         self.verticalLayout_5.setSpacing(0)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.bracketsLabel = QLabel(self.centralwidget)
         self.bracketsLabel.setObjectName(u"bracketsLabel")
-        self.bracketsLabel.setFont(font)
+        self.bracketsLabel.setFont(font1)
 
         self.verticalLayout_5.addWidget(self.bracketsLabel)
 
         self.brackets = QSpinBox(self.centralwidget)
         self.brackets.setObjectName(u"brackets")
+        self.brackets.setFont(font2)
         self.brackets.setMinimum(1)
 
         self.verticalLayout_5.addWidget(self.brackets)
 
 
-        self.verticalLayout_6.addLayout(self.verticalLayout_5)
+        self.verticalLayout_7.addLayout(self.verticalLayout_5)
 
         self.doFocusStacking = QCheckBox(self.centralwidget)
         self.doFocusStacking.setObjectName(u"doFocusStacking")
+        self.doFocusStacking.setFont(font1)
         self.doFocusStacking.setChecked(True)
 
-        self.verticalLayout_6.addWidget(self.doFocusStacking)
+        self.verticalLayout_7.addWidget(self.doFocusStacking)
 
         self.doMetashape = QCheckBox(self.centralwidget)
         self.doMetashape.setObjectName(u"doMetashape")
+        self.doMetashape.setFont(font1)
         self.doMetashape.setChecked(True)
 
-        self.verticalLayout_6.addWidget(self.doMetashape)
+        self.verticalLayout_7.addWidget(self.doMetashape)
+
+        self.horizontalLayout_9 = QHBoxLayout()
+        self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
+        self.verticalLayout_6 = QVBoxLayout()
+        self.verticalLayout_6.setObjectName(u"verticalLayout_6")
+        self.label = QLabel(self.centralwidget)
+        self.label.setObjectName(u"label")
+        self.label.setFont(font2)
+
+        self.verticalLayout_6.addWidget(self.label)
+
+        self.horizontalLayout_6 = QHBoxLayout()
+        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
+        self.xRadioButton = QRadioButton(self.centralwidget)
+        self.xRadioButton.setObjectName(u"xRadioButton")
+        self.xRadioButton.setFont(font2)
+        self.xRadioButton.setChecked(True)
+
+        self.horizontalLayout_6.addWidget(self.xRadioButton)
+
+        self.yRadioButton = QRadioButton(self.centralwidget)
+        self.yRadioButton.setObjectName(u"yRadioButton")
+        self.yRadioButton.setFont(font2)
+
+        self.horizontalLayout_6.addWidget(self.yRadioButton)
+
+        self.zRadioButton = QRadioButton(self.centralwidget)
+        self.zRadioButton.setObjectName(u"zRadioButton")
+        self.zRadioButton.setFont(font2)
+
+        self.horizontalLayout_6.addWidget(self.zRadioButton)
+
+
+        self.verticalLayout_6.addLayout(self.horizontalLayout_6)
+
+        self.horizontalLayout_7 = QHBoxLayout()
+        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
+        self.label_2 = QLabel(self.centralwidget)
+        self.label_2.setObjectName(u"label_2")
+        self.label_2.setMinimumSize(QSize(60, 0))
+        self.label_2.setFont(font2)
+
+        self.horizontalLayout_7.addWidget(self.label_2)
+
+        self.fwdShortPushButton = QPushButton(self.centralwidget)
+        self.fwdShortPushButton.setObjectName(u"fwdShortPushButton")
+        self.fwdShortPushButton.setFont(font2)
+
+        self.horizontalLayout_7.addWidget(self.fwdShortPushButton)
+
+        self.fwdMiddlePushButton = QPushButton(self.centralwidget)
+        self.fwdMiddlePushButton.setObjectName(u"fwdMiddlePushButton")
+        self.fwdMiddlePushButton.setFont(font2)
+
+        self.horizontalLayout_7.addWidget(self.fwdMiddlePushButton)
+
+        self.fwdLongPushButton = QPushButton(self.centralwidget)
+        self.fwdLongPushButton.setObjectName(u"fwdLongPushButton")
+        self.fwdLongPushButton.setFont(font2)
+
+        self.horizontalLayout_7.addWidget(self.fwdLongPushButton)
+
+
+        self.verticalLayout_6.addLayout(self.horizontalLayout_7)
+
+        self.horizontalLayout_8 = QHBoxLayout()
+        self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
+        self.label_3 = QLabel(self.centralwidget)
+        self.label_3.setObjectName(u"label_3")
+        self.label_3.setMinimumSize(QSize(60, 0))
+        self.label_3.setFont(font2)
+
+        self.horizontalLayout_8.addWidget(self.label_3)
+
+        self.backShortPushButton = QPushButton(self.centralwidget)
+        self.backShortPushButton.setObjectName(u"backShortPushButton")
+        self.backShortPushButton.setFont(font2)
+
+        self.horizontalLayout_8.addWidget(self.backShortPushButton)
+
+        self.backMiddlePushButton = QPushButton(self.centralwidget)
+        self.backMiddlePushButton.setObjectName(u"backMiddlePushButton")
+        self.backMiddlePushButton.setFont(font2)
+
+        self.horizontalLayout_8.addWidget(self.backMiddlePushButton)
+
+        self.backLongPushButton = QPushButton(self.centralwidget)
+        self.backLongPushButton.setObjectName(u"backLongPushButton")
+        self.backLongPushButton.setFont(font2)
+
+        self.horizontalLayout_8.addWidget(self.backLongPushButton)
+
+
+        self.verticalLayout_6.addLayout(self.horizontalLayout_8)
+
+
+        self.horizontalLayout_9.addLayout(self.verticalLayout_6)
+
+        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_9.addItem(self.horizontalSpacer_5)
+
+
+        self.verticalLayout_7.addLayout(self.horizontalLayout_9)
 
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
-        self.verticalLayout_6.addItem(self.verticalSpacer)
+        self.verticalLayout_7.addItem(self.verticalSpacer)
 
 
-        self.horizontalLayout_6.addLayout(self.verticalLayout_6)
+        self.horizontalLayout_10.addLayout(self.verticalLayout_7)
 
 
-        self.verticalLayout_7.addLayout(self.horizontalLayout_6)
+        self.verticalLayout_8.addLayout(self.horizontalLayout_10)
 
         self.horizontalLayout_4 = QHBoxLayout()
         self.horizontalLayout_4.setSpacing(0)
@@ -275,6 +397,7 @@ class Ui_MainWindow(object):
         self.startButton.setObjectName(u"startButton")
         self.startButton.setMinimumSize(QSize(80, 0))
         self.startButton.setMaximumSize(QSize(80, 16777215))
+        self.startButton.setFont(font2)
 
         self.horizontalLayout_4.addWidget(self.startButton)
 
@@ -286,14 +409,15 @@ class Ui_MainWindow(object):
         self.stopButton.setObjectName(u"stopButton")
         self.stopButton.setMinimumSize(QSize(80, 0))
         self.stopButton.setMaximumSize(QSize(80, 16777215))
+        self.stopButton.setFont(font2)
 
         self.horizontalLayout_4.addWidget(self.stopButton)
 
 
-        self.verticalLayout_7.addLayout(self.horizontalLayout_4)
+        self.verticalLayout_8.addLayout(self.horizontalLayout_4)
 
 
-        self.horizontalLayout_7.addLayout(self.verticalLayout_7)
+        self.horizontalLayout_11.addLayout(self.verticalLayout_8)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QStatusBar(MainWindow)
@@ -329,6 +453,18 @@ class Ui_MainWindow(object):
         self.bracketsLabel.setText(QCoreApplication.translate("MainWindow", u"Brackets", None))
         self.doFocusStacking.setText(QCoreApplication.translate("MainWindow", u"Focus Stacking", None))
         self.doMetashape.setText(QCoreApplication.translate("MainWindow", u"Metashape", None))
+        self.label.setText(QCoreApplication.translate("MainWindow", u"Control StackShot", None))
+        self.xRadioButton.setText(QCoreApplication.translate("MainWindow", u"X", None))
+        self.yRadioButton.setText(QCoreApplication.translate("MainWindow", u"Y", None))
+        self.zRadioButton.setText(QCoreApplication.translate("MainWindow", u"Z", None))
+        self.label_2.setText(QCoreApplication.translate("MainWindow", u"Forward", None))
+        self.fwdShortPushButton.setText(QCoreApplication.translate("MainWindow", u"short", None))
+        self.fwdMiddlePushButton.setText(QCoreApplication.translate("MainWindow", u"middle", None))
+        self.fwdLongPushButton.setText(QCoreApplication.translate("MainWindow", u"long", None))
+        self.label_3.setText(QCoreApplication.translate("MainWindow", u"Back", None))
+        self.backShortPushButton.setText(QCoreApplication.translate("MainWindow", u"short", None))
+        self.backMiddlePushButton.setText(QCoreApplication.translate("MainWindow", u"middle", None))
+        self.backLongPushButton.setText(QCoreApplication.translate("MainWindow", u"long", None))
         self.startButton.setText(QCoreApplication.translate("MainWindow", u"start", None))
         self.stopButton.setText(QCoreApplication.translate("MainWindow", u"stop", None))
     # retranslateUi

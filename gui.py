@@ -64,8 +64,17 @@ class GUI(QtWidgets.QMainWindow):
         self.gui.imageSaveFolderReferenceButton.clicked.connect(self.updateImageSaveFolder)
         self.gui.metashapeProjectFolderPathReferenceButton.clicked.connect(self.updateMetashapeProjectFolder)
 
-        self.gui.fwdShortPushButton.pressed.connect(lambda: self.moveStackShot(RailDir.FWD))
-        self.gui.backPushButton.pressed.connect(lambda dir=RailDir.BACK: self.moveStackShot(dir))
+        short_dist = 0.1
+        middle_dist = 1.0
+        long_dist = 5.0
+        # move forward
+        self.gui.fwdShortPushButton.pressed.connect(lambda: self.moveStackShot(RailDir.FWD, short_dist))
+        self.gui.fwdMiddlePushButton.pressed.connect(lambda: self.moveStackShot(RailDir.FWD, middle_dist))
+        self.gui.fwdLongPushButton.pressed.connect(lambda: self.moveStackShot(RailDir.FWD, long_dist))
+        # move back
+        self.gui.backShortPushButton.pressed.connect(lambda: self.moveStackShot(RailDir.BACK, short_dist))
+        self.gui.backMiddlePushButton.pressed.connect(lambda: self.moveStackShot(RailDir.BACK, middle_dist))
+        self.gui.backLongPushButton.pressed.connect(lambda: self.moveStackShot(RailDir.BACK, long_dist))
 
         self.config = configparser.ConfigParser()
         self.loadConfig()
