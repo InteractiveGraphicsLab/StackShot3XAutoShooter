@@ -64,6 +64,7 @@ def exec_actions(stop_flag, raw_actions: str, controller: StackShotController, b
                 # wait for finish shutter
                 while controller.get_status(RailAxis.ANY) != RailStatus.IDLE:
                     time.sleep(0.2)
+                time.sleep(0.1)
 
                 image_paths = [os.path.join(image_src_folder, f) for f in os.listdir(image_src_folder)]
                 image_paths.sort(key=os.path.getmtime, reverse=True) # desc images timestamp
