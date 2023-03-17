@@ -87,6 +87,11 @@ class GUI(QtWidgets.QMainWindow):
         try:
             print('connecting to Stackshot3X...')
             self.controller.open()
+            self.working_thread = Thread(target=self.controller.get_status, args=(RailAxis.ANY,), daemon=True)
+            self.working_thread.start()
+            self.working_thread.join(timeout=3)
+            if self.working_thread.is_alive() == True:
+                raise RuntimeError("connection failed.")
         except Exception as excpt:
             print(excpt)
             exit()
