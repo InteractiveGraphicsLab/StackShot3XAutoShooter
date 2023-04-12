@@ -7,6 +7,7 @@ from PySide6 import QtWidgets
 from ui_MainWindow import Ui_MainWindow
 
 import os
+import sys
 import usb.core
 import subprocess
 import configparser
@@ -94,7 +95,7 @@ class GUI(QtWidgets.QMainWindow):
                 raise RuntimeError("connection failed.")
         except Exception as excpt:
             print(excpt)
-            exit()
+            sys.exit()
 
     # load config from config.ini
     def loadConfig(self):
