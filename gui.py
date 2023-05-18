@@ -189,6 +189,7 @@ class GUI(QtWidgets.QMainWindow):
 
         self.working_thread = Thread(target=moveAxis, args=(self.controller, axis, dir, dist,), daemon=True)
         self.working_thread.start()
+        self.working_thread.join()
 
     # start action
     def startAction(self):
