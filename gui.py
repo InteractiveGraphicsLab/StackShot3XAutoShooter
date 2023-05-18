@@ -7,6 +7,7 @@ from PySide6 import QtWidgets
 from ui_MainWindow import Ui_MainWindow
 
 import os
+import time
 import usb.core
 import subprocess
 import configparser
@@ -187,10 +188,10 @@ class GUI(QtWidgets.QMainWindow):
         elif self.gui.zRadioButton.isChecked() == True:
             axis = RailAxis.Z
 
-        # self.working_thread = Thread(target=moveAxis, args=(self.controller, axis, dir, dist,), daemon=True)
-        # self.working_thread.start()
-        # self.working_thread.join()
         moveAxis(self.controller, axis, dir, dist)
+        # wait for rail stop
+        while self.controller.get_status(axis) != RailStatus.IDLE:
+            time.sleep(0.2)
 
     # start action
     def startAction(self):
