@@ -187,9 +187,10 @@ class GUI(QtWidgets.QMainWindow):
         elif self.gui.zRadioButton.isChecked() == True:
             axis = RailAxis.Z
 
-        self.working_thread = Thread(target=moveAxis, args=(self.controller, axis, dir, dist,), daemon=True)
-        self.working_thread.start()
-        self.working_thread.join()
+        # self.working_thread = Thread(target=moveAxis, args=(self.controller, axis, dir, dist,), daemon=True)
+        # self.working_thread.start()
+        # self.working_thread.join()
+        moveAxis(self.controller, axis, dir, dist)
 
     # start action
     def startAction(self):
