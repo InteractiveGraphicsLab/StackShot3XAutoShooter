@@ -45,7 +45,6 @@ def action_parser(raw_action: str):
         action = line.split()
 
         # skip empty line
-        print(action)
         if len(action) == 0:
             continue
 
