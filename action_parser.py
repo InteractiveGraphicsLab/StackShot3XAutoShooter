@@ -5,6 +5,7 @@ def create_action_queue(action_list: list):
     # parse loop
     while i < len(action_list):
         action = action_list[i]
+
         if action[0] == 'loop':
             loop_times = int(action[1])
             i += 1 # next to 'loop'
@@ -42,6 +43,11 @@ def action_parser(raw_action: str):
     loop_count = 0
     for line in raw_action.splitlines():
         action = line.split()
+
+        # skip empty line
+        if len(action) == 0:
+            continue
+
         if action[0] == 'loop' and len(action) == 2 and action[1].isdigit():
             action_list.append(action)
             loop_count += 1
