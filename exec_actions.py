@@ -11,9 +11,11 @@ def exec_actions(stop_flag, raw_actions: str, controller: StackShotController, b
     # validation and parse actions
     try:
         action_queue = action_parser(raw_actions)
+        print()
+        print(action_queue)
     except Exception as e:
-            print(e)
-            return
+        print(e)
+        return
 
     shutter_count = 0
     image_src_folder = config['general']['image_src_folder']
