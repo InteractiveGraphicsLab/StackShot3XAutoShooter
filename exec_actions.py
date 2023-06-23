@@ -7,7 +7,7 @@ from StackShot3X_API_for_Python.commdefs import *
 from action_parser import action_parser
 from StackShot3X_API_for_Python.stackshot_controller import StackShotController
 
-def exec_actions(stop_flag, raw_actions: str, controller: StackShotController, brackets: int, doFocusStacking: bool, doMetashape: bool, config):
+def exec_actions(stop_flag, raw_actions: str, controller: StackShotController, brackets: int, doFocusStacking: bool, doMetashape: bool, moveSpeedPercent: int, config):
     # validation and parse actions
     try:
         action_queue = action_parser(raw_actions)
@@ -50,7 +50,7 @@ def exec_actions(stop_flag, raw_actions: str, controller: StackShotController, b
                 elif action[1] == 'z':
                     axis = RailAxis.Z
 
-                controller.move(axis, RailDir.FWD, float(action[2]))
+                controller.move_at_speed(axis, RailDir.FWD, float(action[2]), moveSpeedPercent/100.0)
 
                 # wait for rail stop
                 while controller.get_status(axis) != RailStatus.IDLE:
