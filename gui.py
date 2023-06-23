@@ -7,6 +7,7 @@ from PySide6 import QtWidgets
 from ui_MainWindow import Ui_MainWindow
 
 import os
+import sys
 import time
 import usb.core
 import subprocess
@@ -16,6 +17,7 @@ from PySide6 import QtGui
 from threading import Thread
 from multiprocessing import Value 
 from StackShot3X_API_for_Python.commdefs import *
+sys.path.append('./StackShot3X_API_for_Python')
 from StackShot3X_API_for_Python.stackshot_controller import StackShotController
 from action_parser import action_parser
 from exec_actions import exec_actions
