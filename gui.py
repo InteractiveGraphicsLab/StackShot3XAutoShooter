@@ -23,7 +23,7 @@ from action_parser import action_parser
 from exec_actions import exec_actions
 
 
-def isValidBrackets(s, min, max):
+def isValidValue(s, min, max):
     try:
         int(s)
     except ValueError:
@@ -104,17 +104,6 @@ class GUI(QtWidgets.QMainWindow):
         self.config.read('config.ini')
         if not 'general' in self.config:
             self.config['general'] = {}
-        # general/brackets
-        if 'brackets' in self.config['general'] and \
-            isValidBrackets(self.config['general']['brackets'], \
-                            self.gui.brackets.minimum(), self.gui.brackets.maximum()) == True:
-            self.gui.brackets.setValue(int(self.config['general']['brackets']))
-        else:
-            self.gui.brackets.setValue(self.gui.brackets.minimum())
-            self.config['general']['brackets'] = str(self.gui.brackets.minimum())
-            f = open('config.ini', 'w')
-            self.config.write(f)
-            f.close()
 
         # general/image_src_folder
         if 'image_src_folder' in self.config['general'] and 0 < len(self.config['general']['image_src_folder']):
@@ -133,6 +122,31 @@ class GUI(QtWidgets.QMainWindow):
             self.gui.metashapeProjectFolderPath.setText(self.config['general']['metashape_project_folder'])
         else:
             self.gui.metashapeProjectFolderPath.setText('Not selected.')
+
+        # general/brackets
+        if 'brackets' in self.config['general'] and \
+            isValidValue(self.config['general']['brackets'], \
+                            self.gui.brackets.minimum(), self.gui.brackets.maximum()) == True:
+            self.gui.brackets.setValue(int(self.config['general']['brackets']))
+        else:
+            self.gui.brackets.setValue(self.gui.brackets.minimum())
+            self.config['general']['brackets'] = str(self.gui.brackets.minimum())
+            f = open('config.ini', 'w')
+            self.config.write(f)
+            f.close()
+
+        # general/speed_percent
+        if 'speed_percent' in self.config['general'] and \
+            isValidValue(self.config['general']['speed_percent'], \
+                            self.gui.speedPercent.minimum(), self.gui.speedPercent.maximum()) == True:
+            self.gui.speedPercent.setValue(int(self.config['general']['speed_percent']))
+        else:
+            self.gui.speedPercent.setValue(self.gui.brackets.minimum())
+            self.config['general']['speed_percent'] = str(self.gui.speedPercent.maximum())
+            f = open('config.ini', 'w')
+            self.config.write(f)
+            f.close()
+
 
     # select "Image Src Folder" PATH from file dialog and save to config
     def updateImageSrcFolder(self):
