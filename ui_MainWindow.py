@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'MainWindow.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.4.2
+## Created by: Qt User Interface Compiler version 6.5.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -16,16 +16,16 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QHBoxLayout,
-    QLabel, QMainWindow, QPlainTextEdit, QPushButton,
-    QRadioButton, QSizePolicy, QSpacerItem, QSpinBox,
-    QStatusBar, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QGridLayout,
+    QHBoxLayout, QLabel, QMainWindow, QPlainTextEdit,
+    QPushButton, QRadioButton, QSizePolicy, QSpacerItem,
+    QSpinBox, QStatusBar, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(672, 546)
+        MainWindow.resize(672, 541)
         font = QFont()
         font.setPointSize(10)
         MainWindow.setFont(font)
@@ -33,12 +33,12 @@ class Ui_MainWindow(object):
         self.actionPreferences.setObjectName(u"actionPreferences")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.horizontalLayout_11 = QHBoxLayout(self.centralwidget)
-        self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
+        self.gridLayout = QGridLayout(self.centralwidget)
+        self.gridLayout.setObjectName(u"gridLayout")
         self.verticalLayout_8 = QVBoxLayout()
         self.verticalLayout_8.setObjectName(u"verticalLayout_8")
-        self.horizontalLayout_10 = QHBoxLayout()
-        self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
+        self.horizontalLayout_11 = QHBoxLayout()
+        self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.actionsPanelLabel = QLabel(self.centralwidget)
@@ -98,7 +98,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addLayout(self.horizontalLayout_5)
 
 
-        self.horizontalLayout_10.addLayout(self.verticalLayout)
+        self.horizontalLayout_11.addLayout(self.verticalLayout)
 
         self.verticalLayout_7 = QVBoxLayout()
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
@@ -272,8 +272,8 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_7.addWidget(self.doMetashape)
 
-        self.horizontalLayout_9 = QHBoxLayout()
-        self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
+        self.horizontalLayout_10 = QHBoxLayout()
+        self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
         self.verticalLayout_6 = QVBoxLayout()
         self.verticalLayout_6.setObjectName(u"verticalLayout_6")
         self.label = QLabel(self.centralwidget)
@@ -341,6 +341,7 @@ class Ui_MainWindow(object):
         self.label_3 = QLabel(self.centralwidget)
         self.label_3.setObjectName(u"label_3")
         self.label_3.setMinimumSize(QSize(60, 0))
+        self.label_3.setMaximumSize(QSize(60, 16777215))
         self.label_3.setFont(font2)
 
         self.horizontalLayout_8.addWidget(self.label_3)
@@ -366,25 +367,54 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_6.addLayout(self.horizontalLayout_8)
 
+        self.horizontalLayout_9 = QHBoxLayout()
+        self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
+        self.label_4 = QLabel(self.centralwidget)
+        self.label_4.setObjectName(u"label_4")
+        self.label_4.setMinimumSize(QSize(60, 0))
+        self.label_4.setMaximumSize(QSize(60, 16777215))
+        self.label_4.setFont(font2)
 
-        self.horizontalLayout_9.addLayout(self.verticalLayout_6)
+        self.horizontalLayout_9.addWidget(self.label_4)
+
+        self.speedPercent = QSpinBox(self.centralwidget)
+        self.speedPercent.setObjectName(u"speedPercent")
+        self.speedPercent.setMinimumSize(QSize(60, 0))
+        self.speedPercent.setMaximumSize(QSize(60, 16777215))
+        self.speedPercent.setMaximum(100)
+        self.speedPercent.setValue(100)
+
+        self.horizontalLayout_9.addWidget(self.speedPercent)
+
+        self.label_5 = QLabel(self.centralwidget)
+        self.label_5.setObjectName(u"label_5")
+        self.label_5.setMinimumSize(QSize(15, 0))
+        self.label_5.setFont(font2)
+
+        self.horizontalLayout_9.addWidget(self.label_5)
+
+
+        self.verticalLayout_6.addLayout(self.horizontalLayout_9)
+
+
+        self.horizontalLayout_10.addLayout(self.verticalLayout_6)
 
         self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
-        self.horizontalLayout_9.addItem(self.horizontalSpacer_5)
+        self.horizontalLayout_10.addItem(self.horizontalSpacer_5)
 
 
-        self.verticalLayout_7.addLayout(self.horizontalLayout_9)
+        self.verticalLayout_7.addLayout(self.horizontalLayout_10)
 
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.verticalLayout_7.addItem(self.verticalSpacer)
 
 
-        self.horizontalLayout_10.addLayout(self.verticalLayout_7)
+        self.horizontalLayout_11.addLayout(self.verticalLayout_7)
 
 
-        self.verticalLayout_8.addLayout(self.horizontalLayout_10)
+        self.verticalLayout_8.addLayout(self.horizontalLayout_11)
 
         self.horizontalLayout_4 = QHBoxLayout()
         self.horizontalLayout_4.setSpacing(0)
@@ -417,7 +447,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_8.addLayout(self.horizontalLayout_4)
 
 
-        self.horizontalLayout_11.addLayout(self.verticalLayout_8)
+        self.gridLayout.addLayout(self.verticalLayout_8, 0, 0, 1, 1)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QStatusBar(MainWindow)
@@ -465,6 +495,8 @@ class Ui_MainWindow(object):
         self.backShortPushButton.setText(QCoreApplication.translate("MainWindow", u"short", None))
         self.backMiddlePushButton.setText(QCoreApplication.translate("MainWindow", u"middle", None))
         self.backLongPushButton.setText(QCoreApplication.translate("MainWindow", u"long", None))
+        self.label_4.setText(QCoreApplication.translate("MainWindow", u"Speed", None))
+        self.label_5.setText(QCoreApplication.translate("MainWindow", u"%", None))
         self.startButton.setText(QCoreApplication.translate("MainWindow", u"start", None))
         self.stopButton.setText(QCoreApplication.translate("MainWindow", u"stop", None))
     # retranslateUi

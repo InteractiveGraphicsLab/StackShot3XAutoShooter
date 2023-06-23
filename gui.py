@@ -34,9 +34,9 @@ def isValidBrackets(s, min, max):
         return False
 
 
-def moveAxis(controller, axis, dir, dist):
+def moveAxis(controller, axis, dir, dist, speedPercent):
     try:
-        controller.move(axis, dir, dist)
+        controller.move_at_speed(axis, dir, dist, speedPercent / 100.0)
     except:
         # pass
         print('move')
@@ -162,6 +162,13 @@ class GUI(QtWidgets.QMainWindow):
             self.config.write(f)
             f.close()
 
+    def saveBracketsAndSpeed(self):
+        self.config['general']['brackets'] = str(self.gui.brackets.value())
+        self.config['general']['speed_percent'] = str(self.gui.speedPercent.value())
+        f = open('config.ini', 'w')
+        self.config.write(f)
+        f.close()
+
     # load action and display on "Actions Panel"
     def loadAction(self):
         fname = QtWidgets.QFileDialog.getOpenFileName(self, 'Select File', '.', "Text file (*.txt)")
@@ -188,7 +195,7 @@ class GUI(QtWidgets.QMainWindow):
         elif self.gui.zRadioButton.isChecked() == True:
             axis = RailAxis.Z
 
-        moveAxis(self.controller, axis, dir, dist)
+        moveAxis(self.controller, axis, dir, dist, self.gui.speedPercent.value())
         # wait for rail stop
         while self.controller.get_status(axis) != RailStatus.IDLE:
             time.sleep(0.2)
@@ -196,13 +203,14 @@ class GUI(QtWidgets.QMainWindow):
     # start action
     def startAction(self):
         print('start')
+        self.saveBracketsAndSpeed()
 
         # set stop_flag to 0(false)
         with self.stop_flag.get_lock():
             self.stop_flag.value = 0 # false
 
         # create and thread to execute actions
-        self.working_thread = Thread(target=exec_actions, args=(self.stop_flag, self.gui.actionsPanel.toPlainText(), self.controller, self.gui.brackets.value(), self.gui.doFocusStacking.isChecked(), self.gui.doMetashape.isChecked(), self.config), daemon=True)
+        self.working_thread = Thread(target=exec_actions, args=(self.stop_flag, self.gui.actionsPanel.toPlainText(), self.controller, self.gui.brackets.value(), self.gui.doFocusStacking.isChecked(), self.gui.doMetashape.isChecked(), self.gui.speedPercent.value(), self.config), daemon=True)
         self.working_thread.start()
 
     # stop in progress action
