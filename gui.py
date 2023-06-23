@@ -7,6 +7,7 @@ from PySide6 import QtWidgets
 from ui_MainWindow import Ui_MainWindow
 
 import os
+import sys
 import time
 import usb.core
 import subprocess
@@ -16,12 +17,13 @@ from PySide6 import QtGui
 from threading import Thread
 from multiprocessing import Value 
 from StackShot3X_API_for_Python.commdefs import *
+sys.path.append('./StackShot3X_API_for_Python')
 from StackShot3X_API_for_Python.stackshot_controller import StackShotController
 from action_parser import action_parser
 from exec_actions import exec_actions
 
 
-def isValidBrackets(s, min, max):
+def isValidValue(s, min, max):
     try:
         int(s)
     except ValueError:
@@ -34,9 +36,9 @@ def isValidBrackets(s, min, max):
         return False
 
 
-def moveAxis(controller, axis, dir, dist):
+def moveAxis(controller, axis, dir, dist, speedPercent):
     try:
-        controller.move(axis, dir, dist)
+        controller.move_at_speed(axis, dir, dist, speedPercent / 100.0)
     except:
         # pass
         print('move')
@@ -102,17 +104,6 @@ class GUI(QtWidgets.QMainWindow):
         self.config.read('config.ini')
         if not 'general' in self.config:
             self.config['general'] = {}
-        # general/brackets
-        if 'brackets' in self.config['general'] and \
-            isValidBrackets(self.config['general']['brackets'], \
-                            self.gui.brackets.minimum(), self.gui.brackets.maximum()) == True:
-            self.gui.brackets.setValue(int(self.config['general']['brackets']))
-        else:
-            self.gui.brackets.setValue(self.gui.brackets.minimum())
-            self.config['general']['brackets'] = str(self.gui.brackets.minimum())
-            f = open('config.ini', 'w')
-            self.config.write(f)
-            f.close()
 
         # general/image_src_folder
         if 'image_src_folder' in self.config['general'] and 0 < len(self.config['general']['image_src_folder']):
@@ -131,6 +122,31 @@ class GUI(QtWidgets.QMainWindow):
             self.gui.metashapeProjectFolderPath.setText(self.config['general']['metashape_project_folder'])
         else:
             self.gui.metashapeProjectFolderPath.setText('Not selected.')
+
+        # general/brackets
+        if 'brackets' in self.config['general'] and \
+            isValidValue(self.config['general']['brackets'], \
+                            self.gui.brackets.minimum(), self.gui.brackets.maximum()) == True:
+            self.gui.brackets.setValue(int(self.config['general']['brackets']))
+        else:
+            self.gui.brackets.setValue(self.gui.brackets.minimum())
+            self.config['general']['brackets'] = str(self.gui.brackets.minimum())
+            f = open('config.ini', 'w')
+            self.config.write(f)
+            f.close()
+
+        # general/speed_percent
+        if 'speed_percent' in self.config['general'] and \
+            isValidValue(self.config['general']['speed_percent'], \
+                            self.gui.speedPercent.minimum(), self.gui.speedPercent.maximum()) == True:
+            self.gui.speedPercent.setValue(int(self.config['general']['speed_percent']))
+        else:
+            self.gui.speedPercent.setValue(self.gui.brackets.minimum())
+            self.config['general']['speed_percent'] = str(self.gui.speedPercent.maximum())
+            f = open('config.ini', 'w')
+            self.config.write(f)
+            f.close()
+
 
     # select "Image Src Folder" PATH from file dialog and save to config
     def updateImageSrcFolder(self):
@@ -162,6 +178,13 @@ class GUI(QtWidgets.QMainWindow):
             self.config.write(f)
             f.close()
 
+    def saveBracketsAndSpeed(self):
+        self.config['general']['brackets'] = str(self.gui.brackets.value())
+        self.config['general']['speed_percent'] = str(self.gui.speedPercent.value())
+        f = open('config.ini', 'w')
+        self.config.write(f)
+        f.close()
+
     # load action and display on "Actions Panel"
     def loadAction(self):
         fname = QtWidgets.QFileDialog.getOpenFileName(self, 'Select File', '.', "Text file (*.txt)")
@@ -188,7 +211,7 @@ class GUI(QtWidgets.QMainWindow):
         elif self.gui.zRadioButton.isChecked() == True:
             axis = RailAxis.Z
 
-        moveAxis(self.controller, axis, dir, dist)
+        moveAxis(self.controller, axis, dir, dist, self.gui.speedPercent.value())
         # wait for rail stop
         while self.controller.get_status(axis) != RailStatus.IDLE:
             time.sleep(0.2)
@@ -196,13 +219,14 @@ class GUI(QtWidgets.QMainWindow):
     # start action
     def startAction(self):
         print('start')
+        self.saveBracketsAndSpeed()
 
         # set stop_flag to 0(false)
         with self.stop_flag.get_lock():
             self.stop_flag.value = 0 # false
 
         # create and thread to execute actions
-        self.working_thread = Thread(target=exec_actions, args=(self.stop_flag, self.gui.actionsPanel.toPlainText(), self.controller, self.gui.brackets.value(), self.gui.doFocusStacking.isChecked(), self.gui.doMetashape.isChecked(), self.config), daemon=True)
+        self.working_thread = Thread(target=exec_actions, args=(self.stop_flag, self.gui.actionsPanel.toPlainText(), self.controller, self.gui.brackets.value(), self.gui.doFocusStacking.isChecked(), self.gui.doMetashape.isChecked(), self.gui.speedPercent.value(), self.config), daemon=True)
         self.working_thread.start()
 
     # stop in progress action
