@@ -1,4 +1,6 @@
 def create_action_queue(action_list: list):
+    print('===========================')
+    print(action_list)
     queue = []
 
     i = 0
@@ -9,9 +11,18 @@ def create_action_queue(action_list: list):
         if action[0] == 'loop':
             loop_times = int(action[1])
             i += 1 # next to 'loop'
-            last_end = len(action_list)-1
-            while action_list[last_end][0] != 'end':
-                last_end -= 1
+            last_end = i
+            loop_count = 1
+            while True:
+                if action_list[last_end][0] == 'loop':
+                    loop_count += 1
+                if action_list[last_end][0] == 'end':
+                    loop_count -= 1
+                    if loop_count == 0:
+                        break
+                last_end += 1
+                print(last_end)
+
             action_in_loop_list = action_list[i:last_end]
 
             loop_queue = create_action_queue(action_in_loop_list)
@@ -21,7 +32,6 @@ def create_action_queue(action_list: list):
         else:
             queue.append(action_list[i])
             i += 1 # next action
-
 
     return queue
 
@@ -47,6 +57,8 @@ def action_parser(raw_action: str):
         # skip empty line
         if len(action) == 0:
             continue
+
+        print(action)
 
         if action[0] == 'loop' and len(action) == 2 and action[1].isdigit():
             action_list.append(action)
