@@ -72,6 +72,8 @@ def action_parser(raw_action: str):
           (action[1] == 'x' or action[1] == 'y' or action[1] == 'z') and \
           isfloat(action[2]): # NOTE: add velocity?
             action_list.append(action)
+        elif action[0] == 'rot' and len(action) == 2 and action[1].isdigit():
+            action_list.append(action)
         elif action[0] == 'shutter' and len(action) == 1:
             action_list.append(action)
         else:
