@@ -2,12 +2,23 @@ import os
 import time
 import signal
 import subprocess
+from typing import Union
 
 from StackShot3X_API_for_Python.commdefs import *
 from action_parser import action_parser
 from StackShot3X_API_for_Python.stackshot_controller import StackShotController
+from rotationtable_controller import RotationTableController
 
-def exec_actions(stop_flag, raw_actions: str, controller: StackShotController, brackets: int, doFocusStacking: bool, doMetashape: bool, moveSpeedPercent: int, config):
+def exec_actions(
+        stop_flag,
+        raw_actions: str,
+        stackshot_controller: StackShotController,
+        rotationtable_controller: RotationTableController,
+        brackets: int,
+        doFocusStacking: bool,
+        doMetashape: bool,
+        moveSpeedPercent: int,
+        config):
     # validation and parse actions
     try:
         action_queue = action_parser(raw_actions)
@@ -31,9 +42,9 @@ def exec_actions(stop_flag, raw_actions: str, controller: StackShotController, b
 
     try:
         # send stop command in advance to prevent infinite move, 
-        controller.stop(RailAxis.X)
-        controller.stop(RailAxis.Y)
-        controller.stop(RailAxis.Z)
+        stackshot_controller.stop(RailAxis.X)
+        stackshot_controller.stop(RailAxis.Y)
+        stackshot_controller.stop(RailAxis.Z)
 
         # execute all actions
         for action in action_queue:
@@ -42,7 +53,7 @@ def exec_actions(stop_flag, raw_actions: str, controller: StackShotController, b
                 if stop_flag.value == 1: # true
                     return
 
-            # move axis
+            # move axis (StackShot)
             if action[0] == 'move':
                 axis = None
                 if action[1] == 'x':
@@ -52,19 +63,25 @@ def exec_actions(stop_flag, raw_actions: str, controller: StackShotController, b
                 elif action[1] == 'z':
                     axis = RailAxis.Z
 
-                controller.move_at_speed(axis, RailDir.FWD, float(action[2]), moveSpeedPercent/100.0)
+                stackshot_controller.move_at_speed(axis, RailDir.FWD, float(action[2]), moveSpeedPercent/100.0)
 
                 # wait for rail stop
-                while controller.get_status(axis) != RailStatus.IDLE:
+                while stackshot_controller.get_status(axis) != RailStatus.IDLE:
                     time.sleep(0.2)
 
+            # rotate (Rotation Table)
+            elif action[0] == 'rot':
+                angle = int(action[1])
+                rotationtable_controller.rotate(angle)
+                while rotationtable_controller.get_status():
+                    time.sleep(0.1)
 
-            # shoot camera
+            # shoot camera (StackShot)
             elif action[0] == 'shutter':
-                controller.shutter(1, 1., 2.) # NOTE
+                stackshot_controller.shutter(1, 1., 2.) # NOTE
 
                 # wait for finish shutter
-                while controller.get_status(RailAxis.ANY) != RailStatus.IDLE:
+                while stackshot_controller.get_status(RailAxis.ANY) != RailStatus.IDLE:
                     time.sleep(0.2)
                 while len(os.listdir(image_src_folder)) < brackets:
                     time.sleep(0.2)
