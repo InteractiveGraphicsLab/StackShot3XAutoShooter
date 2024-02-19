@@ -21,6 +21,7 @@ sys.path.append('./StackShot3X_API_for_Python')
 from StackShot3X_API_for_Python.stackshot_controller import StackShotController
 from action_parser import action_parser
 from exec_actions import exec_actions
+from rotationtable_controller import RotationTableController
 
 
 def isValidValue(s, min, max):
@@ -36,16 +37,16 @@ def isValidValue(s, min, max):
         return False
 
 
-def moveAxis(controller, axis, dir, dist, speedPercent):
+def moveAxis(stackshot_controller, axis, dir, dist, speedPercent):
     try:
-        controller.move_at_speed(axis, dir, dist, speedPercent / 100.0)
+        stackshot_controller.move_at_speed(axis, dir, dist, speedPercent / 100.0)
     except:
         # pass
         print('move')
 
-def stopAxis(controller, axis):
+def stopAxis(stackshot_controller, axis):
     try:
-        controller.stop(axis)
+        stackshot_controller.stop(axis)
     except:
         # pass
         print('stop')
@@ -85,12 +86,12 @@ class GUI(QtWidgets.QMainWindow):
         self.working_thread = None
         self.stop_flag = Value('i', 0) # 0: false, 1: true
 
-        # when start app, connect with StackShot3X
-        self.controller = StackShotController()
+        # connect with StackShot3X
+        self.stackshot_controller = StackShotController()
         try:
             print('connecting to Stackshot3X...')
-            self.controller.open()
-            self.working_thread = Thread(target=self.controller.get_status, args=(RailAxis.ANY,), daemon=True)
+            self.stackshot_controller.open()
+            self.working_thread = Thread(target=self.stackshot_controller.get_status, args=(RailAxis.ANY,), daemon=True)
             self.working_thread.start()
             self.working_thread.join(timeout=3)
             if self.working_thread.is_alive() == True:
@@ -98,6 +99,12 @@ class GUI(QtWidgets.QMainWindow):
         except Exception as excpt:
             print(excpt)
             exit()
+            return
+
+        # connect with RotationTable
+        self.rotationtable_controller = RotationTableController()
+        print('connecting to RotationTable...')
+        self.rotationtable_controller.start()
 
     # load config from config.ini
     def loadConfig(self):
@@ -146,7 +153,6 @@ class GUI(QtWidgets.QMainWindow):
             f = open('config.ini', 'w')
             self.config.write(f)
             f.close()
-
 
     # select "Image Src Folder" PATH from file dialog and save to config
     def updateImageSrcFolder(self):
@@ -211,14 +217,15 @@ class GUI(QtWidgets.QMainWindow):
         elif self.gui.zRadioButton.isChecked() == True:
             axis = RailAxis.Z
 
-        moveAxis(self.controller, axis, dir, dist, self.gui.speedPercent.value())
+        moveAxis(self.stackshot_controller, axis, dir, dist, self.gui.speedPercent.value())
         # wait for rail stop
-        while self.controller.get_status(axis) != RailStatus.IDLE:
+        while self.stackshot_controller.get_status(axis) != RailStatus.IDLE:
             time.sleep(0.2)
 
     # start action
     def startAction(self):
         print('start')
+
         self.saveBracketsAndSpeed()
 
         # set stop_flag to 0(false)
@@ -226,7 +233,7 @@ class GUI(QtWidgets.QMainWindow):
             self.stop_flag.value = 0 # false
 
         # create and thread to execute actions
-        self.working_thread = Thread(target=exec_actions, args=(self.stop_flag, self.gui.actionsPanel.toPlainText(), self.controller, self.gui.brackets.value(), self.gui.doFocusStacking.isChecked(), self.gui.doMetashape.isChecked(), self.gui.speedPercent.value(), self.config), daemon=True)
+        self.working_thread = Thread(target=exec_actions, args=(self.stop_flag, self.gui.actionsPanel.toPlainText(), self.stackshot_controller, self.rotationtable_controller, self.gui.brackets.value(), self.gui.doFocusStacking.isChecked(), self.gui.doMetashape.isChecked(), self.gui.speedPercent.value(), self.config), daemon=True)
         self.working_thread.start()
 
     # stop in progress action
@@ -249,10 +256,12 @@ class GUI(QtWidgets.QMainWindow):
         # after stop all axis, disconnect from StackShot3X
         try:
             print('discoonnecting from Stackshot3X...')
-            self.controller.stop(RailAxis.X)
-            self.controller.stop(RailAxis.Y)
-            self.controller.stop(RailAxis.Z)
-            self.controller.close()
+            self.stackshot_controller.stop(RailAxis.X)
+            self.stackshot_controller.stop(RailAxis.Y)
+            self.stackshot_controller.stop(RailAxis.Z)
+            self.stackshot_controller.close()
         except Exception as excpt:
             print(excpt)
             return
+
+        self.rotationtable_controller.end()
