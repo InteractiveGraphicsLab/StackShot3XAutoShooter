@@ -58,6 +58,8 @@ def exec_actions(stop_flag, raw_actions: str, controller: StackShotController, b
                 while controller.get_status(axis) != RailStatus.IDLE:
                     time.sleep(0.2)
 
+            elif action[0] == 'sleep':
+                time.sleep(float(action[1]))
 
             # shoot camera
             elif action[0] == 'shutter':
