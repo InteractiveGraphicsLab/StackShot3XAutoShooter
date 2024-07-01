@@ -5,11 +5,16 @@ def create_action_queue(action_list: list):
 
     i = 0
     # parse loop
+    inf_loop = False
     while i < len(action_list):
         action = action_list[i]
 
         if action[0] == 'loop':
-            loop_times = int(action[1])
+            if action[1] == 'inf':
+                inf_loop = True
+                loop_times = 1
+            else:
+                loop_times = int(action[1])
             i += 1 # next to 'loop'
             last_end = i
             loop_count = 1
@@ -21,11 +26,12 @@ def create_action_queue(action_list: list):
                     if loop_count == 0:
                         break
                 last_end += 1
-                print(last_end)
 
             action_in_loop_list = action_list[i:last_end]
+            print(action_in_loop_list)
 
-            loop_queue = create_action_queue(action_in_loop_list)
+            loop_queue, _ = create_action_queue(action_in_loop_list)
+            print('+++++', loop_queue, '+++++')
             for t in range(loop_times):
                 queue += loop_queue
             i = last_end + 1 # after end
@@ -33,7 +39,7 @@ def create_action_queue(action_list: list):
             queue.append(action_list[i])
             i += 1 # next action
 
-    return queue
+    return queue, inf_loop
 
 
 def isfloat(s):
@@ -60,7 +66,7 @@ def action_parser(raw_action: str):
 
         print(action)
 
-        if action[0] == 'loop' and len(action) == 2 and action[1].isdigit():
+        if action[0] == 'loop' and len(action) == 2 and (action[1].isdigit() or action[1] == 'inf'):
             action_list.append(action)
             loop_count += 1
         elif action[0] == 'end' and len(action) == 1:

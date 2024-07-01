@@ -67,4 +67,8 @@ print("Build Texture...")
 chunk.buildTexture(blending_mode=Metashape.BlendingMode.MosaicBlending, texture_size=8192, fill_holes=True, ghosting_filter=True, \
                    texture_type=Metashape.Model.TextureType.DiffuseMap, transfer_texture=False)
 
+import datetime
+timestamp = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+chunk.exportCameras(path=os.path.join(project_dir, timestamp + '.xml'), format=Metashape.CamerasFormat.CamerasFormatXML)
+chunk.exportModel(path=os.path.join(project_dir, timestamp + '.obj'), texture_format=Metashape.ImageFormatPNG, format=Metashape.ModelFormat.ModelFormatOBJ)
 doc.save()
