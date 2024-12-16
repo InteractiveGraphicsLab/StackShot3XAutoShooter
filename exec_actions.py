@@ -76,6 +76,9 @@ def exec_actions(
                 while rotationtable_controller.get_status():
                     time.sleep(0.1)
 
+            elif action[0] == 'sleep':
+                time.sleep(float(action[1]))
+
             # shoot camera (StackShot)
             elif action[0] == 'shutter':
                 stackshot_controller.shutter(1, 1., 2.) # NOTE

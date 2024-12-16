@@ -76,6 +76,8 @@ def action_parser(raw_action: str):
             action_list.append(action)
         elif action[0] == 'shutter' and len(action) == 1:
             action_list.append(action)
+        elif action[0] == 'sleep' and len(action) == 2 and isfloat(action[1]):
+            action_list.append(action)
         else:
             raise RuntimeError('SyntaxError', line)
 
