@@ -71,8 +71,16 @@ def exec_actions(
 
             # rotate (Rotation Table)
             elif action[0] == 'rot':
+                ret = rotationtable_controller.set_speed(500) # TODO とりあえずハードコード。UI追加する？
+                if ret == False:
+                    print("Error in rotation table.")
+                while rotationtable_controller.get_status():
+                    time.sleep(0.1)
+
                 angle = int(action[1])
-                rotationtable_controller.rotate(angle)
+                ret = rotationtable_controller.rotate(angle)
+                if ret == False:
+                    print("Error in rotation table.")
                 while rotationtable_controller.get_status():
                     time.sleep(0.1)
 
