@@ -226,6 +226,7 @@ class GUI(QtWidgets.QMainWindow):
             self.stop_flag.value = 0 # false
 
         # create and thread to execute actions
+        # exec_actions.py内のexec_action関数を別スレッドで起動
         self.working_thread = Thread(target=exec_actions, args=(self.stop_flag, self.gui.actionsPanel.toPlainText(), self.controller, self.gui.brackets.value(), self.gui.doFocusStacking.isChecked(), self.gui.doMetashape.isChecked(), self.gui.speedPercent.value(), self.config), daemon=True)
         self.working_thread.start()
 

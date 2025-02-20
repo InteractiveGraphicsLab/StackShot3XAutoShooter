@@ -21,6 +21,7 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QGridLayout,
     QPushButton, QRadioButton, QSizePolicy, QSpacerItem,
     QSpinBox, QStatusBar, QVBoxLayout, QWidget)
 
+# Qt Designerで作成したMainWindow.uiから自動生成
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():

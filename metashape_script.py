@@ -1,3 +1,4 @@
+# MetashapeのPython APIを使用
 # referenced from https://www.agisoft.com/pdf/metashape_python_api_2_0_0.pdf
 
 import os
@@ -14,6 +15,7 @@ Metashape.app.gpu_mask = 1 ##
 doc = Metashape.Document()
 project_dir = env['METASHAPE_PROJECT_PATH']
 
+# 結果保存用のファイルを作成
 doc.save(path=os.path.join(project_dir, 'project.psz'))
 
 chunk = doc.addChunk()
@@ -24,6 +26,7 @@ for img in os.listdir(env['IMAGE_PATH']):
 chunk.addPhotos(photos)
 
 # Align Photos
+# アライメントに失敗したら、精度を落として再実行を繰り返す
 print("Align Photos...")
 for d in [0, 1, 2, 4, 8]:
     chunk.matchPhotos(downscale=d, generic_preselection=True, reference_preselection=False, keypoint_limit=40000, tiepoint_limit=4000)
@@ -31,7 +34,7 @@ for d in [0, 1, 2, 4, 8]:
 
     total_cameras = len([cam for cam in chunk.cameras])
     align_cameras = len([cam for cam in chunk.cameras if cam.transform])
-    align_prcntg = (float(align_cameras) / float(total_cameras)) * 100.0
+    align_prcntg = (float(align_cameras) / float(total_cameras)) * 100.0 # アライメント成功率を計算
 
     print("Total cameras: {}".format(total_cameras))
     print("Align cameras: {}".format(align_cameras))

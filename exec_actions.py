@@ -31,6 +31,7 @@ def exec_actions(stop_flag, raw_actions: str, controller: StackShotController, b
 
     try:
         # send stop command in advance to prevent infinite move, 
+        # 無限に回転してしまうバグを防ぐために、コマンド実行前にすべての軸を停止させる
         controller.stop(RailAxis.X)
         controller.stop(RailAxis.Y)
         controller.stop(RailAxis.Z)
@@ -52,22 +53,27 @@ def exec_actions(stop_flag, raw_actions: str, controller: StackShotController, b
                 elif action[1] == 'z':
                     axis = RailAxis.Z
 
+                # 速度を指定して軸を動かす
+                # デフォルトのスピードだと標本が揺れて撮影しにくいので、速度指定できる関数を使用
                 controller.move_at_speed(axis, RailDir.FWD, float(action[2]), moveSpeedPercent/100.0)
 
                 # wait for rail stop
                 while controller.get_status(axis) != RailStatus.IDLE:
                     time.sleep(0.2)
 
+            # 一時停止するためのコマンド
             elif action[0] == 'sleep':
                 time.sleep(float(action[1]))
 
             # shoot camera
             elif action[0] == 'shutter':
-                controller.shutter(1, 1., 2.) # NOTE
+                controller.shutter(1, 1., 2.) # 撮影
 
                 # wait for finish shutter
                 while controller.get_status(RailAxis.ANY) != RailStatus.IDLE:
                     time.sleep(0.2)
+
+                # 撮影した写真が全てPCに転送されるのを待つ
                 while len(os.listdir(image_src_folder)) < brackets:
                     time.sleep(0.2)
 
